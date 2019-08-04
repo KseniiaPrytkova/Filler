@@ -13,7 +13,7 @@ FLAGS = -O3 -Wall -Wextra -Werror -Iinclude/ -Ilibft/ -Llibft/ -lft
 
 
 all: $(NAME)
-	@echo '🦄 compiling a project "filler" for iMac'
+	@echo '🦄 compiling a project "filler" for you Mac'
 	@gcc -o $(NAME) $(SRC_PROJECT) $(FLAGS)
 	@echo '🦄 ready!'
 
