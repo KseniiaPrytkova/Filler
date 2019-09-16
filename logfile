@@ -1,0 +1,2 @@
+/System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/lib/ruby/2.3.0/universal-darwin16/rbconfig.rb:215: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+Error: : Undefined error: 0
