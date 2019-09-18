@@ -67,6 +67,5 @@ void get_arr_dim(t_init *initial)
 	}
 	str += 8;
 	dim_reader(str, &initial->x_plateau, &initial->y_plateau);
-	ft_strdel(&str);
 }
 

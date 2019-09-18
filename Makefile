@@ -2,7 +2,7 @@ NAME = kprytkov.filler
 LIB_NAME = ./libft/libft.a
 
 SRC_PROJECT = src/filler.c \
-			# ./srcs/game_init.c \
+			./src/init_part.c \
 			# ./srcs/del.c \
 			# ./srcs/game_loop.c \
 			# ./srcs/algorithm.c \
