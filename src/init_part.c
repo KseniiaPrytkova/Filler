@@ -1,5 +1,10 @@
 #include "filler.h"
 
+// TEMP:
+#include <time.h>
+#include <stdint.h>
+#include <inttypes.h>
+
 void get_player_nb(t_init *initial)
 {
 	char *str;
@@ -7,11 +12,11 @@ void get_player_nb(t_init *initial)
 	char figure;
 	int ret;
 
-	if (!(ret = get_next_line(0, &str)))
+	if (!(ret = get_next_line_fl(0, &str)))
 	{
 		perror("Error with reading the line [1] (gnl): ");
 	}
-	// fprintf(fptr, "%c%c\n", str[9], str[10]);
+
 	// if ((str[10] == 1) ? 1 : 2)
 	if (str[10] == '1')
 		figure = 'o';
@@ -61,11 +66,14 @@ void get_arr_dim(t_init *initial)
 
 	initial->x_plateau = 0;
 	initial->y_plateau = 0;
-	if (!(ret = get_next_line(0, &str)))
+
+	if (!(ret = get_next_line_fl(0, &str)))
 	{
 		perror("Error with reading the line [2] (gnl): ");
 	}
+
 	str += 8;
 	dim_reader(str, &initial->x_plateau, &initial->y_plateau);
+	//ft_strdel(&str);
+	//free(str);
 }
-
