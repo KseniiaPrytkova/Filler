@@ -8,7 +8,6 @@
 void get_player_nb(t_init *initial)
 {
 	char *str;
-	// int pn = 0;
 	char figure;
 	int ret;
 
@@ -16,8 +15,6 @@ void get_player_nb(t_init *initial)
 	{
 		perror("Error with reading the line [1] (gnl): ");
 	}
-
-	// if ((str[10] == 1) ? 1 : 2)
 	if (str[10] == '1')
 		figure = 'o';
 	else if (str[10] == '2')
@@ -31,7 +28,6 @@ void get_player_nb(t_init *initial)
 	// fprintf(fptr, "character is: and pl_nb is: %c %c\n", figure, str[10]);
 	initial->figure = figure;
 	ft_strdel(&str);
-	// return (figure);
 }
 
 static void dim_reader(char *str, int *x, int *y)
@@ -74,6 +70,137 @@ void get_arr_dim(t_init *initial)
 
 	str += 8;
 	dim_reader(str, &initial->x_plateau, &initial->y_plateau);
-	//ft_strdel(&str);
+	// ft_strdel(&str);
 	//free(str);
 }
+
+void read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
+{
+	int i;
+	int j;
+	char *str = NULL;
+
+	i = 0;
+	j = 0;
+	/* skip 2 lines before field */
+		get_next_line_fl(0, &str);
+		if (str[0] == 'P' && str[1] == 'l')
+		{
+			// Ugly hack. If line is "Plateau ..." here.
+			ft_strdel(&str);
+			get_next_line_fl(0, &str);
+		}
+		ft_strdel(&str);
+		// Read board data line by line into
+		// board array.
+		while (i < initial->y_plateau)
+		{
+			get_next_line_fl(0, &str);
+			char *line = ft_strsplit(str, ' ')[1];
+			int j = 0;
+			while (j < initial->x_plateau)
+			{
+				board[j][i] = line[j];
+				j++;
+			}
+			ft_strdel(&str);
+			i++;
+		}
+/* print arr */
+	fprintf(fptr, "I WILL PRINT YOUR ARRAY\n");
+	i = 0;
+	while (i < initial->y_plateau)
+	{
+		j = 0;
+		while (j < initial->x_plateau)
+			{
+				fprintf(fptr, "%c", board[j][i]);
+				j++;
+			}
+			fprintf(fptr, "\n");
+		i++;
+	}
+/* --------- */
+}
+
+void read_the_piece(t_init **initial, char ***piece, FILE *fptr)
+{
+	int i;
+	int j;
+	char *str = NULL;
+
+	// Read piece dimensions.
+	get_next_line_fl(0, &str);
+	fprintf(fptr, "----> %s\n", str);
+	fflush(fptr);
+	(*initial)->y_piece = ft_atoi(ft_strsplit(str, ' ')[1]);
+	(*initial)->x_piece = ft_atoi(ft_strsplit(str, ' ')[2]);
+	ft_strdel(&str);
+	fprintf(fptr, "piece y=%d, x=%d\n", (*initial)->y_piece, (*initial)->x_piece);
+	fflush(fptr);
+
+	*piece = (char**)malloc((*initial)->y_piece * sizeof(char*));
+	i = -1;
+	while (++i < (*initial)->y_piece)
+	{
+		(*piece)[i] = (char*)malloc((*initial)->x_piece * sizeof(char));
+	}
+	i = -1;
+	while (++i < (*initial)->y_piece)
+	{
+		get_next_line_fl(0, &str);
+		j = -1;
+		while (++j < (*initial)->x_piece)
+		{
+			(*piece)[i][j] = str[j];
+		}
+		ft_strdel(&str);
+	}
+	// /* print arr */
+	fprintf(fptr, "I WILL PRINT YOUR PIECE\n");
+	fflush(fptr);
+	i = 0;
+	while (i < (*initial)->y_piece)
+	{
+		j = 0;
+		while (j < (*initial)->x_piece)
+			{
+				fprintf(fptr, "%c", (*piece)[i][j]);
+				fflush(fptr);
+				j++;
+			}
+			fprintf(fptr, "\n");
+			fflush(fptr);
+		i++;
+	}
+/* --------- */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,11 +5,23 @@
 #include <stdint.h>
 #include <inttypes.h>
 
+void piece_cleaner(t_init *initial, char **piece)
+{
+	int i;
+
+	i = 0;
+	while(i < initial->y_piece && piece[i])
+	{
+		free (piece[i]);
+		i++;
+	}
+	free(piece);
+}
+
 int main(void)
 {
 	t_init *initial = NULL;
-	char	*str;
-	//int ret = 0;
+	char **piece = NULL;
 	int i = 0;
 
 	if (!(initial = (t_init *)malloc(sizeof(t_init))))
@@ -21,63 +33,23 @@ int main(void)
 
 /* INIT */
 	get_player_nb(initial);
+	/* del me */
+	if (initial->figure == 'o')
+		fprintf(fptr, "we are pl № 1; USE: %c\n", initial->figure);
+	else
+		fprintf(fptr, "we are pl № 2; USE: %c\n", initial->figure);
+	/* ------- */
 	get_arr_dim(initial);
+	/* del me */
+	fprintf(fptr, "Y = %d; X = %d\n",initial->y_plateau, initial->x_plateau);
+	/* ------- */
 
 	char board[initial->x_plateau][initial->y_plateau];
 
 	while (1)
 	{
-		get_next_line_fl(0, &str);
-		if (str[0] == 'P' && str[1] == 'l') {
-			// Ugly hack. If line is "Plateau ..." here.
-			ft_strdel(&str);
-			get_next_line_fl(0, &str);
-		}
-		ft_strdel(&str);
-
-		// Read board data line by line into
-		// board array.
-		i = 0;
-		while (i < initial->y_plateau)
-		{
-			get_next_line_fl(0, &str);
-
-			char *line = ft_strsplit(str, ' ')[1];
-			int j = 0;
-			while (j < initial->x_plateau)
-			{
-				board[j][i] = line[j];
-				j++;
-			}
-
-			ft_strdel(&str);
-			i++;
-		}
-
-		// Read piece dimensions.
-		get_next_line_fl(0, &str);
-		int piece_y = ft_atoi(ft_strsplit(str, ' ')[1]);
-		int piece_x = ft_atoi(ft_strsplit(str, ' ')[2]);
-		initial->x_piece = piece_x;
-		initial->y_piece = piece_y;
-		ft_strdel(&str);
-		fprintf(fptr, "piece y=%d, x=%d\n", piece_y, piece_x);
-		fflush(fptr);
-
-		char piece[initial->x_piece][initial->y_piece];
-
-		// Read the piece.
-		i = -1;
-		while (++i < initial->y_piece)
-		{
-			get_next_line_fl(0, &str);
-			int j = -1;
-			while (++j < initial->x_piece)
-			{
-				piece[j][i] = str[j];
-			}
-			ft_strdel(&str);
-		}
+		read_the_map(initial, initial->y_plateau, board, fptr);
+		read_the_piece(&initial, &piece, fptr);
 
 		// Temp: find the coordinates of the first 'O'/'o' on the
 		// board.
@@ -97,13 +69,12 @@ int main(void)
 				}
 			}
 		}
-
 		// Print coordinates to stdout for the filler VM.
 		fprintf(stdout, "%d %d\n", coord_y, coord_x);
 		fflush(stdout);
 	}
-
 	fclose(fptr);
+	piece_cleaner(initial, piece);
 	free(initial);
 	// system("leaks -quiet test_gnl");
 	return (0);
