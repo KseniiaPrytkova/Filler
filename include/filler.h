@@ -6,6 +6,7 @@
 # include <string.h>
 # include <errno.h>
 # include "libft.h"
+// # include "../libft/libft.h"
 
 # define TRUE 1
 # define FALSE 0
