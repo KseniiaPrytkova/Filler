@@ -17,6 +17,11 @@ typedef struct	s_init
 
 	int opp_x_min;
 	int opp_y_min;
+
+	int opp_x_max;
+	int opp_y_max;
+
+	int heat;
 	//char **piece;
 } 				t_init;
 
@@ -56,6 +61,7 @@ void read_map(t_init *initial, char *str, int n, char board[][n], int fd1)
 {
 	int i = 0;
 	int j = 0;
+	int catch = 0;
 		// Read board data line by line into
 		// board array.
 		while (i < initial->y_plateau)
@@ -68,8 +74,18 @@ void read_map(t_init *initial, char *str, int n, char board[][n], int fd1)
 				board[j][i] = str[j];
 				if (board[j][i] == 'X' || board[j][i] == 'x')
 				{
-					initial->opp_x_min = j;
-					initial->opp_y_min = i;
+					if (catch == 0)
+					{
+						initial->opp_x_min = j;
+						initial->opp_y_min = i;
+						catch = 1;
+					}
+					else
+					{
+						initial->opp_x_max = j;
+						initial->opp_y_max = i;
+					}
+
 				}
 				j++;
 			}
@@ -91,8 +107,81 @@ void read_map(t_init *initial, char *str, int n, char board[][n], int fd1)
 		i++;
 	}
 	printf("MIN OPP COORD: Ymin = %d Xmin = %d\n", initial->opp_y_min, initial->opp_x_min);
+	printf("MAX OPP COORD: Ymax = %d Xmax = %d\n", initial->opp_y_max, initial->opp_x_max);
 	// printf("%c\n", board[initial->opp_x_min][initial->opp_y_min]);
 }
+
+void pr_arr(t_init *initial, int del_x, int del_y)
+{
+	char *s1;
+	char *s2;
+	s1 = ft_itoa(del_x);
+	s2 = ft_itoa(del_y);
+
+	if (initial->heat == 100)
+	{
+		printf("\033[0;31m");
+
+		if (strlen(s1) == 2)
+			printf("[%s]",s1);
+		if (strlen(s2) == 2)
+			printf("[%s]",s2);
+		if (strlen(s1) == 1)
+			printf("[ %s]",s1);
+		if (strlen(s2) == 1)
+			printf("[ %s]",s2);
+
+		printf("\033[0m");
+		initial->heat = 0;
+	}
+	else if (initial->heat == 55)
+	{
+		printf("\033[0;35m");
+
+		if (strlen(s1) == 2)
+			printf("[%s]",s1);
+		if (strlen(s2) == 2)
+			printf("[%s]",s2);
+		if (strlen(s1) == 1)
+			printf("[ %s]",s1);
+		if (strlen(s2) == 1)
+			printf("[ %s]",s2);
+
+		printf("\033[0m");
+		initial->heat = 0;
+	}
+	else if (initial->heat == 42)
+	{
+		printf("\033[0;32m");
+
+		if (strlen(s1) == 2)
+			printf("[%s]",s1);
+		if (strlen(s2) == 2)
+			printf("[%s]",s2);
+		if (strlen(s1) == 1)
+			printf("[ %s]",s1);
+		if (strlen(s2) == 1)
+			printf("[ %s]",s2);
+
+		printf("\033[0m");
+		initial->heat = 0;
+	}
+	else
+	{
+		printf("\033[0;34m");
+		if (strlen(s1) == 2)
+			printf("[%s]",s1);
+		if (strlen(s2) == 2)
+			printf("[%s]",s2);
+		if (strlen(s1) == 1)
+			printf("[ %s]",s1);
+		if (strlen(s2) == 1)
+			printf("[ %s]",s2);
+		printf("\033[0m");
+		initial->heat = 0;
+	}	
+}
+
 /* -------------------------------------------------------------------------- */
 int main(int argc, char *argv[])
 {
@@ -136,52 +225,79 @@ int main(int argc, char *argv[])
 			{
 				if (board[j][i] == 'X' || board[j][i] == 'x')
 				{
-					printf("\033[1;31m");
-					printf("[ %c ]", board[j][i]);
-					printf("[ %c ]", board[j][i]);
+					printf("\033[0;33m");
+					printf("[ %c]", board[j][i]);
+					printf("[ %c]", board[j][i]);
 					printf("\033[0m");
 					board[j][i] = 99;
 					j++;
+					printf(" ");
 				}
 				if ( board[j][i] == 'O' || board[j][i] == 'o')
 				{
-					printf("\033[1;31m");
-					printf("[ %c ]", board[j][i]);
-					printf("[ %c ]", board[j][i]);
+					printf("\033[0;33m");
+					printf("[ %c]", board[j][i]);
+					printf("[ %c]", board[j][i]);
 					printf("\033[0m");
 					board[j][i] = -99;
 					j++;
+					printf(" ");
 				}
 				else
 				{
-					del_x = j - initial->opp_x_min;
-					del_y = i - initial->opp_y_min;
-					board[j][i] = (del_x + del_y);
-					char *s1;
-					char *s2;
-					s1 = ft_itoa(del_x);
-					s2 = ft_itoa(del_y);
+					if ((j <= initial->opp_x_min && i <= initial->opp_y_min) || 
+						(initial->opp_x_max == 0 && initial->opp_y_max == 0))
+					{
+						if ((del_x = j - initial->opp_x_min) < 0)
+							del_x *= -1;
+						if ((del_y = i - initial->opp_y_min) < 0)
+							del_y *= -1;
+					}
+					else
+					{
+						if ((del_x = j - initial->opp_x_max) < 0)
+								del_x *= -1;
+						if ((del_y = i - initial->opp_y_max) < 0)
+								del_y *= -1;
+					}
+					
+					// if ((del_x = j - initial->opp_x_min) < 0)
+					// 	del_x *= -1;
+					// if ((del_y = i - initial->opp_y_min) < 0)
+					// 	del_y *= -1;
 
-					if (strlen(s1) == 2)
-						printf("[ %s]",s1);
-					if (strlen(s2) == 2)
-						printf("[ %s]",s2);
-					if (strlen(s1) == 1)
-						printf("[  %s]",s1);
-					if (strlen(s2) == 1)
-						printf("[  %s]",s2);
-				
-					if (strlen(s1) == 3)
-						printf("[%s]",s1);
-					if (strlen(s2) == 3)
-						printf("[%s]",s2);
+					if ((board[j][i] = del_x - del_y) < 1)
+						board[j][i] *= -1;
+
+					if ((board[j][i] <= initial->opp_x_max - initial->opp_x_min) &&
+						((board[j][i] <= initial->opp_y_max - initial->opp_y_min)))
+					{
+						initial->heat = 100;
+						pr_arr(initial, del_x, del_y);
+					}
+					else if (board[j][i] == 2 || board[j][i] == 3)
+					{
+						initial->heat = 55;
+						pr_arr(initial, del_x, del_y);
+					}
+					else if (board[j][i] == 4 || board[j][i] == 5)
+					{
+						initial->heat = 42;
+						pr_arr(initial, del_x, del_y);
+					}
+					else
+						pr_arr(initial, del_x, del_y);
+
+					
 					
 					j++;
+					printf(" ");
 				}
 			}
-			printf("\n\n\n");
+			printf("\n\n");
 			i++;
 		}
+/* prrrrrriiiiiiiinnnnnnttt */
 		printf("\nI WILL PRINT YOUR ARRAY\n");
 		i = 0;
 		while (i < initial->y_plateau)
@@ -197,7 +313,7 @@ int main(int argc, char *argv[])
 				{
 					if (board[j][i] == 99)
 					{
-						printf("\033[1;31m");
+						printf("\033[0;33m");
 						printf("[+%d]", board[j][i]);
 						printf("\033[0m");
 					}
@@ -211,7 +327,7 @@ int main(int argc, char *argv[])
 				{
 					if (board[j][i] == -99)
 					{
-						printf("\033[1;31m");
+						printf("\033[0;33m");
 						printf("[%d]", board[j][i]);
 						printf("\033[0m");
 					}
