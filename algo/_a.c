@@ -15,12 +15,14 @@ typedef struct	s_init
 	int x_piece;
 	int y_piece;
 
-	int opp_x_min;
-	int opp_y_min;
+	int opp_x_curr;
+	int opp_y_curr;
 
-	int opp_x_max;
-	int opp_y_max;
+	int opp_x_next;
+	int opp_y_next;
 
+	int is_one_piece;
+	int i_was;
 	int heat;
 	//char **piece;
 } 				t_init;
@@ -72,19 +74,22 @@ void read_map(t_init *initial, char *str, int n, char board[][n], int fd1)
 			while (j < initial->x_plateau)
 			{
 				board[j][i] = str[j];
-				if (board[j][i] == 'X' || board[j][i] == 'x')
+				if ((board[j][i] == 'X' || board[j][i] == 'x') && !catch)
 				{
-					if (catch == 0)
-					{
-						initial->opp_x_min = j;
-						initial->opp_y_min = i;
-						catch = 1;
-					}
-					else
-					{
-						initial->opp_x_max = j;
-						initial->opp_y_max = i;
-					}
+					// if (catch == 0)
+					// {
+					// 	initial->opp_x_min = j;
+					// 	initial->opp_y_min = i;
+					// 	catch = 1;
+					// }
+					// else
+					// {
+					// 	initial->opp_x_max = j;
+					// 	initial->opp_y_max = i;
+					// }
+					initial->opp_x_curr = j;
+					initial->opp_y_curr = i;
+					catch = 1;
 
 				}
 				j++;
@@ -106,8 +111,7 @@ void read_map(t_init *initial, char *str, int n, char board[][n], int fd1)
 			printf("\n");
 		i++;
 	}
-	printf("MIN OPP COORD: Ymin = %d Xmin = %d\n", initial->opp_y_min, initial->opp_x_min);
-	printf("MAX OPP COORD: Ymax = %d Xmax = %d\n", initial->opp_y_max, initial->opp_x_max);
+	printf("curr OPP COORD: Ymin = %d Xmin = %d\n", initial->opp_y_curr, initial->opp_x_curr);
 	// printf("%c\n", board[initial->opp_x_min][initial->opp_y_min]);
 }
 
@@ -182,6 +186,49 @@ void pr_arr(t_init *initial, int del_x, int del_y)
 	}	
 }
 
+
+void catch_next(t_init *initial, int i, int j, int n, char board[][n])
+{
+	int temp_i = i;
+	int temp_j = j;
+	int first = 0;
+
+temp_j +=1;
+initial->is_one_piece = 0;
+	while (temp_i < initial->y_plateau)
+	{
+		if (first)
+			temp_j = 0;
+		fprintf(stderr, "----->>>>t_x = [%d]; t_y = [%d]\n", temp_j, temp_i);
+		while(temp_j < initial->x_plateau)
+		{ 
+			first = 1;
+			if (board[temp_j][temp_i] == 'X' || board[temp_j][temp_i] == 'x')
+			{
+				fprintf(stderr, "\ninto!!!\n");
+				initial->opp_x_next = temp_j;
+				initial->opp_y_next = temp_i;
+				fprintf(stderr, "x:%d, y:%d | x_next:%d, y_next:%d\n",temp_j, temp_i, initial->opp_x_next, initial->opp_y_next);
+				initial->is_one_piece = -1;
+				break;
+			}
+			temp_j++;
+		}
+		if (initial->is_one_piece == -1)
+			break ;
+		temp_i++;
+	}
+	// initial->is_one_piece = 1;
+	fprintf(stderr, "here_BEFORE: curr_x:%d curr_y:%d | is_one = %d\n", initial->opp_x_curr, initial->opp_y_curr, initial->is_one_piece);
+	if (initial->is_one_piece == -1)
+	{
+		initial->i_was++;
+		
+	}
+	else
+		initial->is_one_piece = 1;
+}
+
 /* -------------------------------------------------------------------------- */
 int main(int argc, char *argv[])
 {
@@ -202,8 +249,15 @@ int main(int argc, char *argv[])
 		printf("_bad_malloc(structure)\n");
 		return (-1);
 	}
-	initial->opp_x_min = 0;
-	initial->opp_y_min = 0;
+	initial->is_one_piece = -1;
+	initial->i_was = 0;
+	// int first = 0;
+
+	initial->opp_x_curr = 0;
+	initial->opp_y_curr = 0;
+
+	initial->opp_x_next = 0;
+	initial->opp_y_next = 0;
 	fd1 = open(argv[1], O_RDONLY);
 	if (argc > 1)
 	{
@@ -221,6 +275,11 @@ int main(int argc, char *argv[])
 			else
 				printf("line:%d", i);
 			j = 0;
+			if (initial->i_was > 0)
+			{
+				initial->opp_x_curr = initial->opp_x_next;
+				initial->opp_y_curr = initial->opp_y_next;
+			}
 			while (j < initial->x_plateau)
 			{
 				if (board[j][i] == 'X' || board[j][i] == 'x')
@@ -230,6 +289,25 @@ int main(int argc, char *argv[])
 					printf("[ %c]", board[j][i]);
 					printf("\033[0m");
 					board[j][i] = 99;
+/* ----------------------------------------*/
+					// catch_next();
+					
+					if (j == initial->opp_x_curr && i == initial->opp_y_curr && initial->is_one_piece == -1)
+					{
+						// if (initial->is_one_piece == -1 )
+						// {
+								
+						fprintf(stderr, "in if\n");
+						catch_next(initial, i, j, initial->y_plateau, board);
+						fprintf(stderr, "here_AFTER: next_x:%d next_y:%d | is_one = %d\n", initial->opp_x_next, initial->opp_y_next, initial->is_one_piece);
+						// }
+					
+					}
+					if (initial->opp_y_next == initial->opp_y_curr)
+					{
+						initial->opp_x_curr = initial->opp_x_next;
+						initial->opp_y_curr = initial->opp_y_next;
+					}
 					j++;
 					printf(" ");
 				}
@@ -245,51 +323,57 @@ int main(int argc, char *argv[])
 				}
 				else
 				{
-					if ((j <= initial->opp_x_min && i <= initial->opp_y_min) || 
-						(initial->opp_x_max == 0 && initial->opp_y_max == 0))
-					{
-						if ((del_x = j - initial->opp_x_min) < 0)
+					// if ((j <= initial->opp_x_min && i <= initial->opp_y_min) || 
+					// 	(initial->opp_x_max == 0 && initial->opp_y_max == 0))
+					// {
+						if ((del_x = j - initial->opp_x_curr) < 0)
 							del_x *= -1;
-						if ((del_y = i - initial->opp_y_min) < 0)
+						if ((del_y = i - initial->opp_y_curr) < 0)
 							del_y *= -1;
-					}
-					else
-					{
-						if ((del_x = j - initial->opp_x_max) < 0)
-								del_x *= -1;
-						if ((del_y = i - initial->opp_y_max) < 0)
-								del_y *= -1;
-					}
+						// del_x = j - initial->opp_x_min ;
+						// del_y = i - initial->opp_y_min ;
+					// }
+					// else
+					// {
+					// 	initial->opp_x_min +=1;
+					// 	if ((del_x = j - initial->opp_x_max) < 0)
+					// 			del_x *= -1;
+					// 	if ((del_y = i - initial->opp_y_max) < 0)
+					// 			del_y *= -1;
+					// 	// del_x = j - initial->opp_x_max ;
+					// 	// del_y = i - initial->opp_y_max ;
+					// }
 					
 					// if ((del_x = j - initial->opp_x_min) < 0)
 					// 	del_x *= -1;
 					// if ((del_y = i - initial->opp_y_min) < 0)
 					// 	del_y *= -1;
 
-					if ((board[j][i] = del_x - del_y) < 1)
+					if ((board[j][i] = del_x + del_y) < 1)
 						board[j][i] *= -1;
+					// board[j][i] = (del_x + del_y);
 
-					if ((board[j][i] <= initial->opp_x_max - initial->opp_x_min) &&
-						((board[j][i] <= initial->opp_y_max - initial->opp_y_min)))
-					{
-						initial->heat = 100;
-						pr_arr(initial, del_x, del_y);
-					}
-					else if (board[j][i] == 2 || board[j][i] == 3)
-					{
-						initial->heat = 55;
-						pr_arr(initial, del_x, del_y);
-					}
-					else if (board[j][i] == 4 || board[j][i] == 5)
-					{
-						initial->heat = 42;
-						pr_arr(initial, del_x, del_y);
-					}
-					else
+					// if ((board[j][i] <= initial->opp_x_max - initial->opp_x_min) &&
+					// 	((board[j][i] <= initial->opp_y_max - initial->opp_y_min)))
+					// {
+					// 	initial->heat = 100;
+					// 	pr_arr(initial, del_x, del_y);
+					// }
+					// else if (board[j][i] == 2 || board[j][i] == 3)
+					// {
+					// 	initial->heat = 55;
+					// 	pr_arr(initial, del_x, del_y);
+					// }
+					// else if (board[j][i] == 4 || board[j][i] == 5)
+					// {
+					// 	initial->heat = 42;
+					// 	pr_arr(initial, del_x, del_y);
+					// }
+					// else
 						pr_arr(initial, del_x, del_y);
 
 					
-					
+					fprintf(stderr, "currX:[%d]; currY: [%d]\n", initial->opp_x_curr, initial->opp_y_curr );
 					j++;
 					printf(" ");
 				}
@@ -351,3 +435,5 @@ int main(int argc, char *argv[])
 }
 
 // gcc _a.c -I../libft/ -L../libft/ -lft
+
+// ./a.out _map 2>mylogfile
