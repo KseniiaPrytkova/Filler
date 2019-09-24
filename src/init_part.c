@@ -78,10 +78,12 @@ void read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 {
 	int i;
 	int j;
+	int catch;
 	char *str = NULL;
 
 	i = 0;
 	j = 0;
+	catch = 0;
 	/* skip 2 lines before field */
 		get_next_line_fl(0, &str);
 		if (str[0] == 'P' && str[1] == 'l')
@@ -101,6 +103,12 @@ void read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 			while (j < initial->x_plateau)
 			{
 				board[j][i] = line[j];
+				if ((board[j][i] == 'X' || board[j][i] == 'x') && !catch)
+				{
+					initial->opp_x_curr = j;
+					initial->opp_y_curr = i;
+					catch = 1;
+				}
 				j++;
 			}
 			ft_strdel(&str);
@@ -120,6 +128,7 @@ void read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 			fprintf(fptr, "\n");
 		i++;
 	}
+	fprintf(fptr, "curr OPP COORD: Ycurr = %d Xcurr = %d\n", initial->opp_y_curr, initial->opp_x_curr);
 /* --------- */
 }
 

@@ -20,12 +20,22 @@ typedef struct	s_init
 	int y_plateau;
 	int x_piece;
 	int y_piece;
-	//char **piece;
+
+	int opp_x_curr;
+	int opp_y_curr;
+
+	int opp_x_next;
+	int opp_y_next;
+
+	int is_one_piece;
+	int i_was;
+	
 } 				t_init;
 
 void get_player_nb(t_init *initial);
 void get_arr_dim(t_init *initial);
 void read_the_map(t_init *initial, int n, char board[][n], FILE *fptr);
 void read_the_piece(t_init **initial, char ***piece, FILE *fptr);
+void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr);
 
 #endif

@@ -1,1 +1,5 @@
 /System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/lib/ruby/2.3.0/universal-darwin16/rbconfig.rb:215: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+----->>>>t_x = [15]; t_y = [12]
+----->>>>t_x = [0]; t_y = [13]
+----->>>>t_x = [0]; t_y = [14]
+here_BEFORE: curr_x:14 curr_y:12 | is_one = 0

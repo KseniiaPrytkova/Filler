@@ -1,7 +1,7 @@
 #include "filler.h"
 
 // TEMP:
-#include <time.h>
+// #include <time.h>
 #include <stdint.h>
 #include <inttypes.h>
 
@@ -50,6 +50,8 @@ int main(void)
 	{
 		read_the_map(initial, initial->y_plateau, board, fptr);
 		read_the_piece(&initial, &piece, fptr);
+
+		create_hot_board(initial, initial->y_plateau, board, fptr);
 
 		// Temp: find the coordinates of the first 'O'/'o' on the
 		// board.
