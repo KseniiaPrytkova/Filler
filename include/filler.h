@@ -16,19 +16,28 @@ void perror(char const * s);
 typedef struct	s_init
 {
 	char figure;
+	/* save size of the board */
 	int x_plateau;
 	int y_plateau;
+	/* save size of the piece */
 	int x_piece;
 	int y_piece;
-
+	/* coordinates of the opponenent, correspomding to which i build a heat map */
 	int opp_x_curr;
 	int opp_y_curr;
-
 	int opp_x_next;
 	int opp_y_next;
-
+	/* helpers for the process of generating heat map */
 	int is_one_piece;
 	int i_was;
+	/* preliminary coordinates, which is closest to the enemy */
+	int is_first_iteration;
+	int preliminary_x;
+	int preliminary_y;
+	/* answer */
+	int definitive_x;
+	int definitive_y;
+
 	
 } 				t_init;
 

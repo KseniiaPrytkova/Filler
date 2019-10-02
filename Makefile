@@ -2,9 +2,9 @@ NAME = kprytkov.filler
 LIB_NAME = ./libft/libft.a
 
 SRC_PROJECT = src/filler.c \
-              src/init_part.c \
-			src/decision_part.c \
-			# ./srcs/game_loop.c \
+            	src/init_part.c \
+				src/create_hot_map.c \
+				src/make_decision_part.c \
 			# ./srcs/algorithm.c \
 			# ./srcs/heat_map_fillers.c 
 

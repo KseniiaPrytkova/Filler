@@ -6,8 +6,8 @@ void catch_next(t_init *initial, int i, int j, int n, char board[][n])
 	int temp_j = j;
 	int first = 0;
 
-temp_j +=1;
-initial->is_one_piece = 0;
+	temp_j +=1;
+	initial->is_one_piece = FALSE;
 	while (temp_i < initial->y_plateau)
 	{
 		if (first)
@@ -38,7 +38,64 @@ initial->is_one_piece = 0;
 		
 	}
 	else
-		initial->is_one_piece = 1;
+		initial->is_one_piece = TRUE;
+}
+
+static int count_delta_x(t_init *initial, int delta_x, int j)
+{
+	if ((delta_x = j - initial->opp_x_curr) < 0)
+		delta_x *= -1;
+
+	return (delta_x);
+}
+
+static int count_delta_y(t_init *initial, int delta_y, int i)
+{
+	if ((delta_y = i - initial->opp_y_curr) < 0)
+		delta_y *= -1;
+
+	return (delta_y);
+}
+
+static void take_care_of_yourself(t_init *initial, int i, int j)
+{
+	int delta_x = 0;
+	int delta_y = 0;
+
+	int prelim_delta_x = 0;
+	int prelim_delta_y = 0;
+	
+	if (initial->is_first_iteration == TRUE)
+	{
+		initial->preliminary_x = j;
+		initial->preliminary_y = i;
+		initial->is_first_iteration = FALSE;
+		// fprintf(fptr, "pre X:[%d]; pre Y: [%d]\n",initial->preliminary_x, initial->preliminary_y);
+		// fflush(fptr);
+	}
+	else
+	{
+		// fprintf(fptr, "opp_y_curr====== %d\n", initial->opp_y_curr);
+		// fflush(fptr);
+		delta_x = count_delta_x(initial, delta_x, j);
+		// fprintf(fptr, "del_x====== %d\n", delta_x);
+		// fflush(fptr);
+		
+		// fprintf(fptr, "opp_x_curr====== %d\n", initial->opp_x_curr);
+		// fflush(fptr);
+		delta_y = count_delta_y(initial, delta_y, i);
+		// fprintf(fptr, "del_y====== %d\n", delta_y);
+		// fflush(fptr);
+
+		prelim_delta_x = count_delta_x(initial, prelim_delta_x, initial->preliminary_x);
+		prelim_delta_y = count_delta_y(initial, prelim_delta_y, initial->preliminary_y);
+
+		if ((delta_x + delta_y) <= (prelim_delta_x + prelim_delta_y))
+		{
+			initial->preliminary_x = j;
+			initial->preliminary_y = i;
+		}	
+	}				
 }
 
 void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
@@ -53,15 +110,6 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 	int delta_y = 0;
 
 	
-	initial->is_one_piece = -1;
-	initial->i_was = 0;
-
-	// initial->opp_x_curr = 0;
-	// initial->opp_y_curr = 0;
-
-	initial->opp_x_next = 0;
-	initial->opp_y_next = 0;
-
 	while (i < initial->y_plateau)
 	{
 		j = 0;
@@ -95,18 +143,36 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 			if ( board[j][i] == 'O' || board[j][i] == 'o')
 			{
 				board[j][i] = -99;
+				take_care_of_yourself(initial, i, j);
+				// board[j][i] = -99;
+				// if (initial->is_one_piece == -1)
+				// {
+				// 	initial->preliminary_x = j;
+				// 	initial->preliminary_y = i;
+					fprintf(fptr, "pre X_:[%d]; pre Y_: [%d]\n",initial->preliminary_x, initial->preliminary_y);
+					fflush(fptr);
+				// }
+				// else
+				// {
+				// 	initial->preliminary_x = j;
+				// 	initial->preliminary_y = i;
+				// 	if ()
+				// }
 				j++;
 			}
 			else
 			{
-				if ((delta_x = j - initial->opp_x_curr) < 0)
-					delta_x *= -1;
-				if ((delta_y = i - initial->opp_y_curr) < 0)
-					delta_y *= -1;
-				if ((board[j][i] = delta_x + delta_y) < 1)
-					board[j][i] *= -1;					
-				fprintf(fptr, "currX:[%d]; currY: [%d]\n", initial->opp_x_curr, initial->opp_y_curr );
-				fflush(fptr);
+				if ((board[j][i] = (delta_x = count_delta_x(initial, delta_x, j)) + (delta_y = count_delta_y(initial, delta_y, i))) < 1)
+					board[j][i] *= -1;
+
+				// if ((delta_x = j - initial->opp_x_curr) < 0)
+				// 	delta_x *= -1;
+				// if ((delta_y = i - initial->opp_y_curr) < 0)
+				// 	delta_y *= -1;
+				// if ((board[j][i] = delta_x + delta_y) < 1)
+				// 	board[j][i] *= -1;
+				// fprintf(fptr, "currX:[%d]; currY: [%d]\n", initial->opp_x_curr, initial->opp_y_curr );
+				// fflush(fptr);				
 				j++;
 			}
 		}
