@@ -16,6 +16,7 @@ void perror(char const * s);
 typedef struct	s_init
 {
 	char figure;
+	char enemy_figure;
 	/* save size of the board */
 	int x_plateau;
 	int y_plateau;

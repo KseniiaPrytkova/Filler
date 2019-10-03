@@ -120,9 +120,12 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 		}
 		while (j < initial->x_plateau)
 		{
-			if (board[j][i] == 'X' || board[j][i] == 'x')
+			// if (board[j][i] == 'X' || board[j][i] == 'x')
+			if ( (board[j][i] == initial->enemy_figure) || (board[j][i] == initial->enemy_figure - 32))
 			{
 				board[j][i] = 99;
+				fprintf(fptr, "							enemy_x:%d enemy_y:%d\n", j, i);
+				fflush(fptr);
 /* ----------------------------------------*/
 				if (j == initial->opp_x_curr && i == initial->opp_y_curr && initial->is_one_piece == -1)
 				{
@@ -138,9 +141,10 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 					initial->opp_x_curr = initial->opp_x_next;
 					initial->opp_y_curr = initial->opp_y_next;
 				}
-				j++;
+				// j++;
 			}
-			if ( board[j][i] == 'O' || board[j][i] == 'o')
+			// if ( board[j][i] == 'O' || board[j][i] == 'o')
+			else if ( (board[j][i] == initial->figure) || (board[j][i] == initial->figure - 32))
 			{
 				board[j][i] = -99;
 				take_care_of_yourself(initial, i, j);
@@ -158,7 +162,7 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 				// 	initial->preliminary_y = i;
 				// 	if ()
 				// }
-				j++;
+				// j++;
 			}
 			else
 			{
@@ -173,8 +177,9 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 				// 	board[j][i] *= -1;
 				// fprintf(fptr, "currX:[%d]; currY: [%d]\n", initial->opp_x_curr, initial->opp_y_curr );
 				// fflush(fptr);				
-				j++;
+				// j++;
 			}
+			j++;
 		}
 		i++;
 	}

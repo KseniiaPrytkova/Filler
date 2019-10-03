@@ -56,9 +56,17 @@ int main(void)
 	get_player_nb(initial);
 	/* del me */
 	if (initial->figure == 'o')
+	{
 		fprintf(fptr, "we are pl № 1; USE: %c\n", initial->figure);
-	else
+		fprintf(fptr, "or: %c\n", initial->figure - 32 );
+		initial->enemy_figure = 'x';
+	}
+	else if (initial->figure == 'x')
+	{
 		fprintf(fptr, "we are pl № 2; USE: %c\n", initial->figure);
+		fprintf(fptr, "or: %c\n", initial->figure - 32 );
+		initial->enemy_figure = 'o';
+	}
 	/* ------- */
 	get_arr_dim(initial);
 	/* del me */

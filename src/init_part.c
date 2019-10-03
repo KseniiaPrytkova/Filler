@@ -60,8 +60,8 @@ void get_arr_dim(t_init *initial)
 	int ret;
 	char *str;
 
-	initial->x_plateau = 0;
-	initial->y_plateau = 0;
+	// initial->x_plateau = 0;
+	// initial->y_plateau = 0;
 
 	if (!(ret = get_next_line_fl(0, &str)))
 	{
@@ -103,7 +103,8 @@ void read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 			while (j < initial->x_plateau)
 			{
 				board[j][i] = line[j];
-				if ((board[j][i] == 'X' || board[j][i] == 'x') && !catch)
+				if (((board[j][i] == initial->enemy_figure) || (board[j][i] == initial->enemy_figure - 32)) && !catch)
+				// if ((board[j][i] == 'X' || board[j][i] == 'x') && !catch)
 				{
 					initial->opp_x_curr = j;
 					initial->opp_y_curr = i;
