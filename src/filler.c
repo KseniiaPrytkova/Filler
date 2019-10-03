@@ -45,44 +45,69 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 	int points = 0;
 	int nm_player = 0;
 
+	// piece: i = y, j = x
+	// board: x = y, y = x
+
+	//if (x + initial->y_piece > initial->x_plateau)
+	if (x + initial->x_piece > initial->x_plateau)
+	{
+		//fprintf(fptr, "  x bound: %d + %d = %d > %d -> return 99\n",
+		//	x, initial->y_piece, x + initial->y_piece,
+		//	initial->x_plateau);
+		//fflush(fptr);
+		return 99;
+	}
+	//if (y + initial->x_piece > initial->y_plateau)
+	if (y + initial->y_piece > initial->y_plateau)
+	{
+		//fprintf(fptr, "  y bound: %d + %d = %d > %d -> return 99\n",
+		//	y, initial->x_piece, y + initial->x_piece,
+		//	initial->y_plateau);
+		//fflush(fptr);
+		return 99;
+	}
+
 	while (++i < initial->y_piece)
 	{
 		j = -1;
 		while (++j < initial->x_piece)
 		{
-			fprintf(fptr, "  piece %d, %d: %d (%c)\n", i, j, piece[i][j], piece[i][j]);
-			fflush(fptr);
+			//fprintf(fptr, "  piece %d, %d: %d (%c)\n", i, j, piece[i][j], piece[i][j]);
+			//fflush(fptr);
 
 			// Player.
 			if (board[x+j][y+i] == -99 &&
 				piece[i][j] == '*')
 			{
-				fprintf(fptr, "  encountered player, piece here: %c\n",
-					piece[i][j]);
-				fflush(fptr);
+				//fprintf(fptr, "  encountered player, piece here: %c\n",
+				//	piece[i][j]);
+				//fflush(fptr);
 				if (++nm_player > 1) {
-					fprintf(fptr, "  return 99 because of >1 player\n");
-					fflush(fptr);
+					//fprintf(fptr, "  return 99 because of >1 player\n");
+					//fflush(fptr);
 					return 99;
 				}
 			}
 			// Enemy.
 			else if (board[x+j][y+i] == 99 &&
-				piece[i][j] == '*')//'*')
+				piece[i][j] == '*')
 			{
-				fprintf(fptr, "  return 99 because of enemy\n");
-				fflush(fptr);
+				//fprintf(fptr, "  return 99 because of enemy\n");
+				//fflush(fptr);
 				return 99;
 			}
-			else {
-				fprintf(fptr, "  adding %d to points (from board %d, %d)\n", board[x+j][y+i], x+j, y+i);
-				fflush(fptr);
+			else if (board[x+j][y+i] != 99 &&
+				board[x+j][y+i] != -99)
+			{
+				//fprintf(fptr, "  adding %d to points (from board %d, %d)\n", board[x+j][y+i], x+j, y+i);
+				//fflush(fptr);
 				points += board[x+j][y+i];
 			}
 		}
 	}
 	if (nm_player != 1) {
-		fprintf(fptr, "  nm_player=%d -> return 99\n", nm_player);
+		//fprintf(fptr, "  nm_player=%d -> return 99\n", nm_player);
+		//fflush(fptr);
 		return 99;
 	}
 
@@ -91,34 +116,7 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 
 int piece_calc_points(t_init *initial, char **piece, int n, char board[][n], FILE *fptr)
 {
-	// .**
-	// ..*
-
-	// [   ][ O ][   ][   ][   ]
-	// [   ][ O ][ O ][   ][   ]
-
-	// [ * ][ * ][   ][   ][   ]
-	// [ . ][ * ][   ][   ][   ]
-	// [   ][ O ][ O ][   ][   ]  NO: outside border
-
-	// [ . ][ * ][ * ][   ][   ]
-	// [ . ][ . ][ * ][   ][   ]
-	// [   ][ O ][ O ][   ][   ]  NO
-
-	// [   ][ . ][ * ][ * ][   ]
-	// [   ][ . ][ . ][ * ][   ]
-	// [   ][ O ][ O ][   ][   ]  NO
-
-	// [ * ][ * ][   ][   ][   ]
-	// [ . ][ * ][   ][   ][   ]  NO: outside border
-
-	// [ . ][ * ][ * ][   ][   ]
-	// [ . ][ . ][ * ][   ][   ]  NO
-
-	// [   ][ . ][ * ][ * ][   ]
-	// [   ][ . ][ . ][ * ][   ]  NO
-
-	// Start in the upper left corner and loop down.
+	// start in the upper left corner and loop down.
 	int x;
 	int y = initial->temp_y - (initial->y_piece - 1) - 1;
 
@@ -127,9 +125,6 @@ int piece_calc_points(t_init *initial, char **piece, int n, char board[][n], FIL
 
 	int points_best = 99;
 	int points_new;
-
-	fprintf(fptr, "initial temp: %d, %d\n", initial->temp_x, initial->temp_y);
-	fflush(fptr);
 
 	while (++y <= initial->temp_y)
 	{
@@ -140,17 +135,11 @@ int piece_calc_points(t_init *initial, char **piece, int n, char board[][n], FIL
 		{
 			if (x < 0)
 				continue;
-			fprintf(fptr, "seb2: %d, %d\n", x, y);
-			fflush(fptr);
 
 			points_new = piece_calc_points_bis(initial, piece, n, board,
 				x, y, fptr);
-			fprintf(fptr, "seb2: points_new prim: %d\n", points_new);
-			fflush(fptr);
 			if (points_new < points_best)
 			{
-				fprintf(fptr, "seb2: new best points prim!\n");
-				fflush(fptr);
 				points_best = points_new;
 				x_best = x;
 				y_best = y;
@@ -169,35 +158,22 @@ void piece_get_placement(t_init *initial, char **piece, int n, char board[][n], 
 	int points_best = 99;
 	int points_new;
 
-	fprintf(fptr, "seb: plateau: %d, %d\n", initial->x_plateau,
-		initial->y_plateau);
-	fflush(fptr);
-
 	while (++i < initial->y_plateau)
 	{
 		j = -1;
 		while (++j < initial->x_plateau)
 		{
-			fprintf(fptr, "seb: %d, %d\n", j, i);
-			fflush(fptr);
 			if ((board[j][i] == -99))
 			{
-				fprintf(fptr, "seb: found player: %d, %d\n\n", j, i);
-				fflush(fptr);
 				initial->temp_x = j;
 				initial->temp_y = i;
 				points_new = piece_calc_points(initial, piece, n, board, fptr);
-				fprintf(fptr, "points_new: %d\n", points_new);
-				fflush(fptr);
 				if (points_new < points_best)
 				{
-					fprintf(fptr, "new best points!\n");
-					fflush(fptr);
 					points_best = points_new;
 					initial->definitive_x = initial->temp_x;
 					initial->definitive_y = initial->temp_y;
 				}
-				//piece_calc_points(initial, piece, n, board, fptr);
 			}
 		}
 	}
@@ -243,33 +219,16 @@ int main(void)
 
 	while (1)
 	{
-		read_the_map(initial, initial->y_plateau, board, fptr);
+		if (!read_the_map(initial, initial->y_plateau, board, fptr))
+		{
+			return (0);
+		}
 		read_the_piece(&initial, &piece, fptr);
 
 		create_hot_board(initial, initial->y_plateau, board, fptr);
 
-		fprintf(fptr, "seb: before get_placement()\n");
-		fflush(fptr);
 		piece_get_placement(initial, piece, initial->y_plateau, board, fptr);
 
-		// Temp: find the coordinates of the first 'O'/'o' on the
-		// board.
-		// i = -1;
-		// int coord_x, coord_y;
-		// int q = 0;
-		// while (++i < initial->y_plateau && !q)
-		// {
-		// 	int j = -1;
-		// 	while (++j < initial->x_plateau && !q)
-		// 	{
-		// 		if (board[j][i] == 'O' ||
-		// 			board[j][i] == 'o') {
-		// 			coord_x = j;
-		// 			coord_y = i;
-		// 			q = 1;
-		// 		}
-		// 	}
-		// }
 		// Print coordinates to stdout for the filler VM.
 		fprintf(fptr, "------------------------------------!!!PRELIMINARY_X:!!![%d]; !!!PRELIMINARY_Y:!!! [%d]\n\n",initial->definitive_x, initial->definitive_y);
 		fflush(fptr);

@@ -1,10 +1,5 @@
 #include "filler.h"
 
-// TEMP:
-#include <time.h>
-#include <stdint.h>
-#include <inttypes.h>
-
 void get_player_nb(t_init *initial)
 {
 	char *str;
@@ -74,7 +69,7 @@ void get_arr_dim(t_init *initial)
 	//free(str);
 }
 
-void read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
+int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 {
 	int i;
 	int j;
@@ -86,7 +81,15 @@ void read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 	catch = 0;
 	/* skip 2 lines before field */
 		get_next_line_fl(0, &str);
-		if (str[0] == 'P' && str[1] == 'l')
+		fprintf(fptr, "read_the_map: str: \"%s\"\n", str);
+		fflush(fptr);
+		if (str == NULL)
+		{
+			// a null string from the filter vm
+			// ends the game.
+			return (0);
+		}
+		else if (str[0] == 'P' && str[1] == 'l')
 		{
 			// Ugly hack. If line is "Plateau ..." here.
 			ft_strdel(&str);
@@ -131,6 +134,7 @@ void read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 	}
 	fprintf(fptr, "curr OPP COORD: Ycurr = %d Xcurr = %d\n", initial->opp_y_curr, initial->opp_x_curr);
 /* --------- */
+	return (1);
 }
 
 void read_the_piece(t_init **initial, char ***piece, FILE *fptr)
