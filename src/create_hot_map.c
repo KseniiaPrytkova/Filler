@@ -15,7 +15,9 @@ void catch_next(t_init *initial, int i, int j, int n, char board[][n])
 		while(temp_j < initial->x_plateau)
 		{ 
 			first = 1;
-			if (board[temp_j][temp_i] == 'X' || board[temp_j][temp_i] == 'x')
+			// if (board[temp_j][temp_i] == 'X' || board[temp_j][temp_i] == 'x')
+			if ((board[temp_j][temp_i] == initial->enemy_figure) ||
+				(board[temp_j][temp_i] == initial->enemy_figure - 32))
 			{
 				fprintf(stderr, "\ninto!!!\n");
 				initial->opp_x_next = temp_j;
