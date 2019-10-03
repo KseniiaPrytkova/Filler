@@ -1,6 +1,6 @@
 #include "filler.h"
 
-void catch_next(t_init *initial, int i, int j, int n, char board[][n])
+void catch_next(t_init *initial, int i, int j, int n, char board[][n], FILE *fptr)
 {
 	int temp_i = i;
 	int temp_j = j;
@@ -20,9 +20,11 @@ void catch_next(t_init *initial, int i, int j, int n, char board[][n])
 				(board[temp_j][temp_i] == initial->enemy_figure - 32))
 			{
 				fprintf(stderr, "\ninto!!!\n");
+				fflush(fptr);
 				initial->opp_x_next = temp_j;
 				initial->opp_y_next = temp_i;
 				fprintf(stderr, "x:%d, y:%d | x_next:%d, y_next:%d\n",temp_j, temp_i, initial->opp_x_next, initial->opp_y_next);
+				fflush(fptr);
 				initial->is_one_piece = -1;
 				break;
 			}
@@ -34,6 +36,7 @@ void catch_next(t_init *initial, int i, int j, int n, char board[][n])
 	}
 	// initial->is_one_piece = 1;
 	fprintf(stderr, "here_BEFORE: curr_x:%d curr_y:%d | is_one = %d\n", initial->opp_x_curr, initial->opp_y_curr, initial->is_one_piece);
+	fflush(fptr);
 	if (initial->is_one_piece == -1)
 	{
 		initial->i_was++;
@@ -105,13 +108,17 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 	fprintf(fptr, "i am in hot!!\n\n" );
 	fflush(fptr);
 
+
+	fprintf(fptr, "currX:[%d]; currY: [%d]\n", initial->opp_x_curr, initial->opp_y_curr );
+	fflush(fptr);
 	int i = 0;
 	int j = 0;
 
 	int delta_x = 0;
 	int delta_y = 0;
 
-	
+	initial->is_one_piece = -1;
+	initial->i_was = 0;
 	while (i < initial->y_plateau)
 	{
 		j = 0;
@@ -123,10 +130,14 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 		while (j < initial->x_plateau)
 		{
 			// if (board[j][i] == 'X' || board[j][i] == 'x')
+			// fprintf(fptr, "currX:[%d]; currY: [%d]\n", initial->opp_x_curr, initial->opp_y_curr );
+			// fflush(fptr);
 			if ( (board[j][i] == initial->enemy_figure) || (board[j][i] == initial->enemy_figure - 32))
 			{
 				board[j][i] = 99;
-				fprintf(fptr, "							enemy_x:%d enemy_y:%d\n", j, i);
+				// fprintf(fptr, "							enemy_x:%d enemy_y:%d\n", j, i);
+				// fflush(fptr);
+				fprintf(fptr, "1)) ..currX:[%d]; currY: [%d]; is_1_piece == %d\n", initial->opp_x_curr, initial->opp_y_curr, initial->is_one_piece );
 				fflush(fptr);
 /* ----------------------------------------*/
 				if (j == initial->opp_x_curr && i == initial->opp_y_curr && initial->is_one_piece == -1)
@@ -134,18 +145,20 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 								
 					fprintf(fptr, "in if\n");
 					fflush(fptr);
-					catch_next(initial, i, j, initial->y_plateau, board);
+
+					catch_next(initial, i, j, initial->y_plateau, board, fptr);
+
 					fprintf(fptr, "here_AFTER: next_x:%d next_y:%d | is_one = %d\n", initial->opp_x_next, initial->opp_y_next, initial->is_one_piece);
 					fflush(fptr);
 				}
+
 				if (initial->opp_y_next == initial->opp_y_curr)
 				{
 					initial->opp_x_curr = initial->opp_x_next;
 					initial->opp_y_curr = initial->opp_y_next;
 				}
-				// j++;
+				j++;
 			}
-			// if ( board[j][i] == 'O' || board[j][i] == 'o')
 			else if ( (board[j][i] == initial->figure) || (board[j][i] == initial->figure - 32))
 			{
 				board[j][i] = -99;
@@ -155,8 +168,8 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 				// {
 				// 	initial->preliminary_x = j;
 				// 	initial->preliminary_y = i;
-					fprintf(fptr, "pre X_:[%d]; pre Y_: [%d]\n",initial->preliminary_x, initial->preliminary_y);
-					fflush(fptr);
+					// fprintf(fptr, "pre X_:[%d]; pre Y_: [%d]\n",initial->preliminary_x, initial->preliminary_y);
+					// fflush(fptr);
 				// }
 				// else
 				// {
@@ -164,7 +177,7 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 				// 	initial->preliminary_y = i;
 				// 	if ()
 				// }
-				// j++;
+				j++;
 			}
 			else
 			{
@@ -179,9 +192,9 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 				// 	board[j][i] *= -1;
 				// fprintf(fptr, "currX:[%d]; currY: [%d]\n", initial->opp_x_curr, initial->opp_y_curr );
 				// fflush(fptr);				
-				// j++;
+				j++;
 			}
-			j++;
+			// j++;
 		}
 		i++;
 	}

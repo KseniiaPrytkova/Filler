@@ -1,6 +1,53 @@
 /System/Library/Frameworks/Ruby.framework/Versions/2.3/usr/lib/ruby/2.3.0/universal-darwin16/rbconfig.rb:215: warning: Insecure world writable dir /usr/local/bin in PATH, mode 040777
+here_BEFORE: curr_x:14 curr_y:12 | is_one = 0
 
 into!!!
-x:2, y:9 | x_next:2, y_next:9
-here_BEFORE: curr_x:2 curr_y:8 | is_one = -1
-here_BEFORE: curr_x:2 curr_y:9 | is_one = 0
+x:14, y:12 | x_next:14, y_next:12
+here_BEFORE: curr_x:13 curr_y:12 | is_one = -1
+here_BEFORE: curr_x:14 curr_y:12 | is_one = 0
+
+into!!!
+x:12, y:11 | x_next:12, y_next:11
+here_BEFORE: curr_x:11 curr_y:11 | is_one = -1
+
+into!!!
+x:12, y:12 | x_next:12, y_next:12
+here_BEFORE: curr_x:12 curr_y:11 | is_one = -1
+
+into!!!
+x:13, y:12 | x_next:13, y_next:12
+here_BEFORE: curr_x:12 curr_y:12 | is_one = -1
+
+into!!!
+x:14, y:12 | x_next:14, y_next:12
+here_BEFORE: curr_x:13 curr_y:12 | is_one = -1
+here_BEFORE: curr_x:14 curr_y:12 | is_one = 0
+
+into!!!
+x:12, y:10 | x_next:12, y_next:10
+here_BEFORE: curr_x:11 curr_y:10 | is_one = -1
+
+into!!!
+x:13, y:10 | x_next:13, y_next:10
+here_BEFORE: curr_x:12 curr_y:10 | is_one = -1
+
+into!!!
+x:11, y:11 | x_next:11, y_next:11
+here_BEFORE: curr_x:13 curr_y:10 | is_one = -1
+
+into!!!
+x:12, y:11 | x_next:12, y_next:11
+here_BEFORE: curr_x:11 curr_y:11 | is_one = -1
+
+into!!!
+x:12, y:12 | x_next:12, y_next:12
+here_BEFORE: curr_x:12 curr_y:11 | is_one = -1
+
+into!!!
+x:13, y:12 | x_next:13, y_next:12
+here_BEFORE: curr_x:12 curr_y:12 | is_one = -1
+
+into!!!
+x:14, y:12 | x_next:14, y_next:12
+here_BEFORE: curr_x:13 curr_y:12 | is_one = -1
+here_BEFORE: curr_x:14 curr_y:12 | is_one = 0
