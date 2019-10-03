@@ -47,40 +47,18 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 
 	while (++i < initial->y_piece)
 	{
-		if ((y - i) < 0)
-		{
-			fprintf(fptr, "  return 99, y - i < 0\n");
-			fflush(fptr);
-			return 99;
-		}
-		else if ((y - i) > initial->y_plateau)
-		{
-			fprintf(fptr, "  return 99, y - i > initi...\n");
-			fflush(fptr);
-			return 99;
-		}
 		j = -1;
 		while (++j < initial->x_piece)
 		{
-			if ((x - j) < 0) {
-				fprintf(fptr, "  return 99, x - j < 0\n");
-				fflush(fptr);
-				return 99;
-			}
-			else if ((x - j) > initial->x_plateau) {
-				fprintf(fptr, "  return 99, x - j > initi...\n");
-				fflush(fptr);
-				return 99;
-			}
-
-			fprintf(fptr, "  piece %d, %d: %d\n", i, j, piece[i][j]);
+			fprintf(fptr, "  piece %d, %d: %d (%c)\n", i, j, piece[i][j], piece[i][j]);
 			fflush(fptr);
 
 			// Player.
-			if (board[y+j][x+i] == -99 &&
-				piece[i][j] == 42)//'*')
+			if (board[x+j][y+i] == -99 &&
+				piece[i][j] == '*')
 			{
-				fprintf(fptr, "  encountered player\n");
+				fprintf(fptr, "  encountered player, piece here: %c\n",
+					piece[i][j]);
 				fflush(fptr);
 				if (++nm_player > 1) {
 					fprintf(fptr, "  return 99 because of >1 player\n");
@@ -89,20 +67,25 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 				}
 			}
 			// Enemy.
-			else if (board[y+j][x+i] == 99 &&
-				piece[i][j] == 42)//'*')
+			else if (board[x+j][y+i] == 99 &&
+				piece[i][j] == '*')//'*')
 			{
 				fprintf(fptr, "  return 99 because of enemy\n");
 				fflush(fptr);
 				return 99;
 			}
 			else {
-				fprintf(fptr, "  adding %d to points\n", board[y+j][x+i]);
+				fprintf(fptr, "  adding %d to points (from board %d, %d)\n", board[x+j][y+i], x+j, y+i);
 				fflush(fptr);
-				points += board[y+j][x+i];
+				points += board[x+j][y+i];
 			}
 		}
 	}
+	if (nm_player != 1) {
+		fprintf(fptr, "  nm_player=%d -> return 99\n", nm_player);
+		return 99;
+	}
+
 	return points;
 }
 
