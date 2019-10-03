@@ -34,12 +34,14 @@ typedef struct	s_init
 	/* preliminary coordinates, which is closest to the enemy */
 	int is_first_iteration;
 	int preliminary_x;
+
 	int preliminary_y;
 	/* answer */
 	int definitive_x;
 	int definitive_y;
 
-	
+	int temp_x;
+	int temp_y;
 } 				t_init;
 
 void get_player_nb(t_init *initial);

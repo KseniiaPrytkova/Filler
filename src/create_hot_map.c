@@ -19,12 +19,12 @@ void catch_next(t_init *initial, int i, int j, int n, char board[][n], FILE *fpt
 			if ((board[temp_j][temp_i] == initial->enemy_figure) ||
 				(board[temp_j][temp_i] == initial->enemy_figure - 32))
 			{
-				fprintf(stderr, "\ninto!!!\n");
-				fflush(fptr);
+				// fprintf(stderr, "\ninto!!!\n");
+				// fflush(fptr);
 				initial->opp_x_next = temp_j;
 				initial->opp_y_next = temp_i;
-				fprintf(stderr, "x:%d, y:%d | x_next:%d, y_next:%d\n",temp_j, temp_i, initial->opp_x_next, initial->opp_y_next);
-				fflush(fptr);
+				// fprintf(stderr, "x:%d, y:%d | x_next:%d, y_next:%d\n",temp_j, temp_i, initial->opp_x_next, initial->opp_y_next);
+				// fflush(fptr);
 				initial->is_one_piece = -1;
 				break;
 			}
@@ -34,9 +34,9 @@ void catch_next(t_init *initial, int i, int j, int n, char board[][n], FILE *fpt
 			break ;
 		temp_i++;
 	}
-	// initial->is_one_piece = 1;
-	fprintf(stderr, "here_BEFORE: curr_x:%d curr_y:%d | is_one = %d\n", initial->opp_x_curr, initial->opp_y_curr, initial->is_one_piece);
-	fflush(fptr);
+
+	// fprintf(stderr, "here_BEFORE: curr_x:%d curr_y:%d | is_one = %d\n", initial->opp_x_curr, initial->opp_y_curr, initial->is_one_piece);
+	// fflush(fptr);
 	if (initial->is_one_piece == -1)
 	{
 		initial->i_was++;
@@ -137,8 +137,8 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 				board[j][i] = 99;
 				// fprintf(fptr, "							enemy_x:%d enemy_y:%d\n", j, i);
 				// fflush(fptr);
-				fprintf(fptr, "1)) ..currX:[%d]; currY: [%d]; is_1_piece == %d\n", initial->opp_x_curr, initial->opp_y_curr, initial->is_one_piece );
-				fflush(fptr);
+				// fprintf(fptr, "1)) ..currX:[%d]; currY: [%d]; is_1_piece == %d\n", initial->opp_x_curr, initial->opp_y_curr, initial->is_one_piece );
+				// fflush(fptr);
 /* ----------------------------------------*/
 				if (j == initial->opp_x_curr && i == initial->opp_y_curr && initial->is_one_piece == -1)
 				{
