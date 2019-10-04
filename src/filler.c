@@ -55,11 +55,16 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 		return POINTS_INF;
 	}
 
+
 	// Check the average x and y and gravitate
 	// towards the area with least x/y density.
 	int avg_x = initial->player_points_x / initial->player_points_nm;
 	int avg_y = initial->player_points_y / initial->player_points_nm;
 	int mid_x = initial->x_plateau / 2;
+
+	int avg_e_x = initial->enemy_points_x / initial->enemy_points_nm;
+	int avg_e_y = initial->enemy_points_y / initial->enemy_points_nm;
+
 	// Right field - want to move to the left field.
 	if (avg_x >= mid_x)
 	{
@@ -69,7 +74,6 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 	{
 		points -= x * GRAV_FACTOR_X;
 	}
-
 	int mid_y = initial->y_plateau / 2;
 	if (avg_y >= mid_y)
 	{
@@ -80,6 +84,20 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 		points -= y * GRAV_FACTOR_Y;
 	}
 
+	// ENEMY POS FACTOR.
+	int delta_x = avg_x - avg_e_x;
+	int delta_y = avg_y - avg_e_y;
+
+	// ex: enemy: 10, 10
+	//     p:     20, 10
+	// d_x = 10
+	// d_y = 0
+	
+
+
+
+
+	// HEAT MAP.
 	while (++i < initial->y_piece)
 	{
 		j = -1;
@@ -125,7 +143,7 @@ int piece_calc_points(t_init *initial, char **piece, int n, char board[][n], FIL
 	int x_best;
 	int y_best;
 
-	int points_best = 99;
+	int points_best = POINTS_INF;
 	int points_new;
 
 	while (++y <= initial->temp_y)
@@ -157,7 +175,7 @@ int piece_get_placement(t_init *initial, char **piece, int n, char board[][n], F
 {
 	int i = -1;
 	int j;
-	int points_best = 99;
+	int points_best = POINTS_INF;
 	int points_new;
 
 	initial->definitive_x = 0;
@@ -168,6 +186,7 @@ int piece_get_placement(t_init *initial, char **piece, int n, char board[][n], F
 		j = -1;
 		while (++j < initial->x_plateau)
 		{
+			// Player point.
 			if ((board[j][i] == -99))
 			{
 				initial->temp_x = j;
@@ -175,6 +194,9 @@ int piece_get_placement(t_init *initial, char **piece, int n, char board[][n], F
 				points_new = piece_calc_points(initial, piece, n, board, fptr);
 				if (points_new < points_best)
 				{
+					fprintf(fptr, "points_new: %d < %d\n",
+						points_new, points_best);
+					fflush(fptr);
 					points_best = points_new;
 					initial->definitive_x = initial->temp_x;
 					initial->definitive_y = initial->temp_y;
@@ -183,12 +205,12 @@ int piece_get_placement(t_init *initial, char **piece, int n, char board[][n], F
 		}
 	}
 	// If no placement could be found.
-	if (points_best == POINTS_INF)
+	/*if (points_best == POINTS_INF)
 	{
 		fprintf(fptr, "  No solution found - return 0\n");
 		fflush(fptr);
 		return (0);
-	}
+	}*/
 	return (1);
 }
 

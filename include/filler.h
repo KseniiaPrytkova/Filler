@@ -16,6 +16,7 @@
 
 # define GRAV_FACTOR_X 2
 # define GRAV_FACTOR_Y 2
+# define ENEMY_POS_FACTOR 2
 
 void perror(char const * s);
 typedef struct	s_init
@@ -48,10 +49,13 @@ typedef struct	s_init
 	int temp_x;
 	int temp_y;
 
-	// Hot map: store the distribution of player points.
+	// Hotmap: store the distribution of player points.
 	int player_points_nm;
 	int player_points_x;
 	int player_points_y;
+	int enemy_points_nm;
+	int enemy_points_x;
+	int enemy_points_y;
 } 				t_init;
 
 void get_player_nb(t_init *initial);

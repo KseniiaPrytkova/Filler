@@ -120,6 +120,9 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 	initial->player_points_nm = 0;
 	initial->player_points_x = 0;
 	initial->player_points_y = 0;
+	initial->enemy_points_nm = 0;
+	initial->enemy_points_x = 0;
+	initial->enemy_points_y = 0;
 
 	initial->is_one_piece = -1;
 	initial->i_was = 0;
@@ -144,6 +147,11 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 				// fprintf(fptr, "1)) ..currX:[%d]; currY: [%d]; is_1_piece == %d\n", initial->opp_x_curr, initial->opp_y_curr, initial->is_one_piece );
 				// fflush(fptr);
 /* ----------------------------------------*/
+
+				initial->enemy_points_nm++;
+				initial->enemy_points_x += j;
+				initial->enemy_points_y += i;
+
 				if (j == initial->opp_x_curr && i == initial->opp_y_curr && initial->is_one_piece == -1)
 				{
 								
