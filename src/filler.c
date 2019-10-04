@@ -45,6 +45,7 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 	int points = 0;
 	int nm_player = 0;
 
+	// Check the border limits.
 	if (x + initial->x_piece > initial->x_plateau)
 	{
 		return POINTS_INF;
@@ -54,9 +55,10 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 		return POINTS_INF;
 	}
 
+	// Check the average x and y and gravitate
+	// towards the area with least x/y density.
 	int avg_x = initial->player_points_x / initial->player_points_nm;
 	int avg_y = initial->player_points_y / initial->player_points_nm;
-
 	int mid_x = initial->x_plateau / 2;
 	// Right field - want to move to the left field.
 	if (avg_x >= mid_x)
@@ -65,7 +67,7 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 	}
 	else if (avg_x < mid_x)
 	{
-		points -= x * 2;
+		points -= x * GRAV_FACTOR_X;
 	}
 
 	int mid_y = initial->y_plateau / 2;
@@ -75,7 +77,7 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 	}
 	else if (avg_y < mid_y)
 	{
-		points -= y * 2;
+		points -= y * GRAV_FACTOR_Y;
 	}
 
 	while (++i < initial->y_piece)
@@ -83,25 +85,28 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 		j = -1;
 		while (++j < initial->x_piece)
 		{
-			// Player.
-			if (board[x+j][y+i] == -99 &&
-				piece[i][j] == '*')
+			if (piece[i][j] == '*')
 			{
-				if (++nm_player > 1) {
+				// Player.
+				if (board[x+j][y+i] == -99)
+				{
+					if (++nm_player > 1)
+					{
+						return POINTS_INF;
+					}
+					continue;
+				}
+				// Enemy.
+				else if (board[x+j][y+i] == 99)
+				{
 					return POINTS_INF;
 				}
+				else
+				{
+					points += board[x+j][y+i];
+				}
 			}
-			// Enemy.
-			else if (board[x+j][y+i] == 99 &&
-				piece[i][j] == '*')
-			{
-				return POINTS_INF;
-			}
-			else if (board[x+j][y+i] != 99 &&
-				board[x+j][y+i] != -99)
-			{
-				points += board[x+j][y+i];
-			}
+
 		}
 	}
 	if (nm_player != 1) {
@@ -148,12 +153,15 @@ int piece_calc_points(t_init *initial, char **piece, int n, char board[][n], FIL
 	return points_best;
 }
 
-void piece_get_placement(t_init *initial, char **piece, int n, char board[][n], FILE *fptr)
+int piece_get_placement(t_init *initial, char **piece, int n, char board[][n], FILE *fptr)
 {
 	int i = -1;
 	int j;
 	int points_best = 99;
 	int points_new;
+
+	initial->definitive_x = 0;
+	initial->definitive_y = 0;
 
 	while (++i < initial->y_plateau)
 	{
@@ -174,6 +182,14 @@ void piece_get_placement(t_init *initial, char **piece, int n, char board[][n], 
 			}
 		}
 	}
+	// If no placement could be found.
+	if (points_best == POINTS_INF)
+	{
+		fprintf(fptr, "  No solution found - return 0\n");
+		fflush(fptr);
+		return (0);
+	}
+	return (1);
 }
 
 int main(void)
@@ -216,26 +232,39 @@ int main(void)
 
 	while (1)
 	{
+		fprintf(fptr, "## read_the_map()\n");
+		fflush(fptr);
 		if (!read_the_map(initial, initial->y_plateau, board, fptr))
 		{
-			return (0);
+			break;
 		}
+		fprintf(fptr, "## read_the_piece()\n");
+		fflush(fptr);
 		read_the_piece(&initial, &piece, fptr);
 
+		fprintf(fptr, "## create_hot_board()\n");
+		fflush(fptr);
 		create_hot_board(initial, initial->y_plateau, board, fptr);
 
-		piece_get_placement(initial, piece, initial->y_plateau, board, fptr);
+		fprintf(fptr, "## piece_get_placement()\n");
+		fflush(fptr);
+		if (!piece_get_placement(initial, piece, initial->y_plateau, board, fptr))
+		{
+			fprintf(stdout, "0 0\n");
+			fflush(stdout);
+			break;
+		}
 
 		// Print coordinates to stdout for the filler VM.
-		fprintf(fptr, "------------------------------------!!!PRELIMINARY_X:!!![%d]; !!!PRELIMINARY_Y:!!! [%d]\n\n",initial->definitive_x, initial->definitive_y);
+		fprintf(fptr, "---- PLACEMENT: %d, %d\n\n",initial->definitive_x, initial->definitive_y);
 		fflush(fptr);
 
-		//fprintf(stdout, "%d %d\n", initial->preliminary_y, initial->preliminary_x);
 		fprintf(stdout, "%d %d\n", initial->definitive_y, initial->definitive_x);
 		fflush(stdout);
 	}
 	fclose(fptr);
-	piece_cleaner(initial, piece);
+	if (piece != NULL)
+		piece_cleaner(initial, piece);
 	free(initial);
 	// system("leaks -quiet test_gnl");
 	return (0);

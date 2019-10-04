@@ -14,6 +14,9 @@
 
 # define POINTS_INF 999999
 
+# define GRAV_FACTOR_X 2
+# define GRAV_FACTOR_Y 2
+
 void perror(char const * s);
 typedef struct	s_init
 {
