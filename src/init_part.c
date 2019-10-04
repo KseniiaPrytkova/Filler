@@ -87,6 +87,8 @@ int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 		{
 			// a null string from the filter vm
 			// ends the game.
+			fprintf(fptr, "#### ERROR: str is null -> quit\n");
+			fflush(fptr);
 			return (0);
 		}
 		else if (str[0] == 'P' && str[1] == 'l')
@@ -94,6 +96,16 @@ int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 			// Ugly hack. If line is "Plateau ..." here.
 			ft_strdel(&str);
 			get_next_line_fl(0, &str);
+		}
+		else if (str[0] == ' ' && str[1] == ' ' && str[2] == ' ')
+		{
+			
+		}
+		else
+		{
+			fprintf(fptr, "#### ERROR: unknown str: \"%s\"\n", str);
+			fflush(fptr);
+			return (0);
 		}
 		ft_strdel(&str);
 		// Read board data line by line into

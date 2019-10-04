@@ -45,26 +45,37 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 	int points = 0;
 	int nm_player = 0;
 
-	// piece: i = y, j = x
-	// board: x = y, y = x
-
-	//if (x + initial->y_piece > initial->x_plateau)
 	if (x + initial->x_piece > initial->x_plateau)
 	{
-		//fprintf(fptr, "  x bound: %d + %d = %d > %d -> return 99\n",
-		//	x, initial->y_piece, x + initial->y_piece,
-		//	initial->x_plateau);
-		//fflush(fptr);
-		return 99;
+		return POINTS_INF;
 	}
-	//if (y + initial->x_piece > initial->y_plateau)
 	if (y + initial->y_piece > initial->y_plateau)
 	{
-		//fprintf(fptr, "  y bound: %d + %d = %d > %d -> return 99\n",
-		//	y, initial->x_piece, y + initial->x_piece,
-		//	initial->y_plateau);
-		//fflush(fptr);
-		return 99;
+		return POINTS_INF;
+	}
+
+	int avg_x = initial->player_points_x / initial->player_points_nm;
+	int avg_y = initial->player_points_y / initial->player_points_nm;
+
+	int mid_x = initial->x_plateau / 2;
+	// Right field - want to move to the left field.
+	if (avg_x >= mid_x)
+	{
+		points -= (initial->x_plateau - x) * 2; 
+	}
+	else if (avg_x < mid_x)
+	{
+		points -= x * 2;
+	}
+
+	int mid_y = initial->y_plateau / 2;
+	if (avg_y >= mid_y)
+	{
+		points -= (initial->y_plateau - y) * 2;
+	}
+	else if (avg_y < mid_y)
+	{
+		points -= y * 2;
 	}
 
 	while (++i < initial->y_piece)
@@ -72,43 +83,29 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 		j = -1;
 		while (++j < initial->x_piece)
 		{
-			//fprintf(fptr, "  piece %d, %d: %d (%c)\n", i, j, piece[i][j], piece[i][j]);
-			//fflush(fptr);
-
 			// Player.
 			if (board[x+j][y+i] == -99 &&
 				piece[i][j] == '*')
 			{
-				//fprintf(fptr, "  encountered player, piece here: %c\n",
-				//	piece[i][j]);
-				//fflush(fptr);
 				if (++nm_player > 1) {
-					//fprintf(fptr, "  return 99 because of >1 player\n");
-					//fflush(fptr);
-					return 99;
+					return POINTS_INF;
 				}
 			}
 			// Enemy.
 			else if (board[x+j][y+i] == 99 &&
 				piece[i][j] == '*')
 			{
-				//fprintf(fptr, "  return 99 because of enemy\n");
-				//fflush(fptr);
-				return 99;
+				return POINTS_INF;
 			}
 			else if (board[x+j][y+i] != 99 &&
 				board[x+j][y+i] != -99)
 			{
-				//fprintf(fptr, "  adding %d to points (from board %d, %d)\n", board[x+j][y+i], x+j, y+i);
-				//fflush(fptr);
 				points += board[x+j][y+i];
 			}
 		}
 	}
 	if (nm_player != 1) {
-		//fprintf(fptr, "  nm_player=%d -> return 99\n", nm_player);
-		//fflush(fptr);
-		return 99;
+		return POINTS_INF;
 	}
 
 	return points;

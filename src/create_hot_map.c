@@ -117,6 +117,10 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 	int delta_x = 0;
 	int delta_y = 0;
 
+	initial->player_points_nm = 0;
+	initial->player_points_x = 0;
+	initial->player_points_y = 0;
+
 	initial->is_one_piece = -1;
 	initial->i_was = 0;
 	while (i < initial->y_plateau)
@@ -163,6 +167,11 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 			{
 				board[j][i] = -99;
 				take_care_of_yourself(initial, i, j);
+
+				initial->player_points_nm++;
+				initial->player_points_x += j;
+				initial->player_points_y += i;
+
 				// board[j][i] = -99;
 				// if (initial->is_one_piece == -1)
 				// {
