@@ -20,7 +20,7 @@ import random
 
 __PLAYER_BINARY = "kprytkov.filler"
 
-cmd = "./resources/filler_vm -f resources/maps/map00 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler"
+cmd = "./resources/filler_vm -f resources/maps/map01 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler"
 
 
 #plt.axis([0, 10, 0, 1])
@@ -51,6 +51,29 @@ def read_init(data, p, state):
 count = 0
 def create_frame(settings, board):
 	pass
+
+	xs_empty, ys_empty = [], []
+	xs_player, ys_player = [], []
+	xs_enemy, ys_enemy = [], []
+
+	for i, line in enumerate(board):
+		for j, c in enumerate(c for c in line):
+			if c == 'X' or c == 'x':
+				xs_player += [i]
+				ys_player += [j]
+			elif c == 'O' or c == 'o':
+				xs_enemy += [i]
+				ys_enemy += [j]
+			else:
+				xs_empty += [i]
+				ys_empty += [j]
+
+	#plt.clear()
+	plt.plot(xs_player, ys_player, 's', color='green', alpha=0.5)
+	plt.plot(xs_enemy, ys_enemy, 's', color='red', alpha=0.5)
+	plt.pause(0.02)
+
+
 	#print(str(board) + '\n')
 	#for e in board:
 	#	print(e)
@@ -92,13 +115,14 @@ if __name__ == "__main__":
 	while init:
 		line, init, state = read_init(settings, p, state)
 
-	plt.axis([0, settings['board_dim_y'], 0, settings['board_dim_x']])
+	plt.axis([-0.5, settings['board_dim_y']+0.5, -0.5, settings['board_dim_x']+0.5])
 
 	while True:
 		line, state = read_reg(settings, p, state)
 
 		if not line:
 			break
+	plt.pause(2.0)
 
 
 
