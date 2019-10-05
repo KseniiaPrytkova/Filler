@@ -5,7 +5,7 @@ from subprocess import Popen, PIPE
 
 import numpy as np
 import matplotlib
-matplotlib.use("Agg")
+#matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib import animation
 from matplotlib.animation import FFMpegWriter
@@ -22,6 +22,9 @@ __PLAYER_BINARY = "kprytkov.filler"
 
 cmd = "./resources/filler_vm -f resources/maps/map00 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler"
 
+
+plt.axis([0, 10, 0, 1])
+count = 0
 
 def read_init(data, p, state):
 	cont = True
@@ -46,7 +49,15 @@ def read_init(data, p, state):
 
 
 def create_frame(settings, line):
+	global count
+
 	print(line)
+
+	y = np.random.random()
+	plt.scatter(count, y)
+	plt.pause(0.05)
+
+	count += 1
 
 
 def read_reg(settings, p, state):
