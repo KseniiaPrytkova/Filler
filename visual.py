@@ -23,8 +23,8 @@ __PLAYER_BINARY = "kprytkov.filler"
 cmd = "./resources/filler_vm -f resources/maps/map00 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler"
 
 
-plt.axis([0, 10, 0, 1])
-count = 0
+#plt.axis([0, 10, 0, 1])
+
 
 def read_init(data, p, state):
 	cont = True
@@ -48,16 +48,19 @@ def read_init(data, p, state):
 	return line, cont, state
 
 
-def create_frame(settings, line):
-	global count
+count = 0
+def create_frame(settings, board):
+	pass
+	#print(str(board) + '\n')
+	#for e in board:
+	#	print(e)
+	#print('\n')
 
-	print(line)
+	#y = np.random.random()
+	#plt.scatter(count, y)
+	#plt.pause(0.05)
 
-	y = np.random.random()
-	plt.scatter(count, y)
-	plt.pause(0.05)
-
-	count += 1
+	#count += 1
 
 
 def read_reg(settings, p, state):
@@ -69,10 +72,14 @@ def read_reg(settings, p, state):
 				state = -1
 		elif state == -1:
 			state += 1
-		elif state < settings['board_dim_x']:
-			create_frame(settings, line.split(' ')[1])
-			state += 1
-		else:
+		elif state == 0:
+			# Create a frame.
+			board = [line.split(' ')[1].strip()]
+			while state < settings['board_dim_x'] - 1:
+				line = p.stdout.readline()
+				board += [line.split(' ')[1].strip()]
+				state += 1
+			create_frame(settings, board)
 			state = -2
 
 	return line, state
@@ -84,6 +91,8 @@ if __name__ == "__main__":
 	state = -2
 	while init:
 		line, init, state = read_init(settings, p, state)
+
+	plt.axis([0, settings['board_dim_y'], 0, settings['board_dim_x']])
 
 	while True:
 		line, state = read_reg(settings, p, state)
