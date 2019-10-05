@@ -1,32 +1,29 @@
 
 
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE
 
 
+import numpy as np
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib import animation
+from matplotlib.animation import FFMpegWriter
+import time
+#from IPython import display
+import random
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#import matplotlib.animation as animation
+#import numpy as np
+#from pylab import *
 
 
 __PLAYER_BINARY = "kprytkov.filler"
 
-
-
 cmd = "./resources/filler_vm -f resources/maps/map00 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler"
 
-def read_init(data, p):
+
+def read_init(data, p, state):
 	cont = True
 
 	line = p.stdout.readline()
@@ -41,33 +38,47 @@ def read_init(data, p):
 	if 'Plateau' in line:
 		settings['board_dim_x'] = int(line.split(' ')[1])
 		settings['board_dim_y'] = int(line.split(' ')[2][:-2])
+		print("board x, y: {}, {}".format(settings['board_dim_x'], settings['board_dim_y']))
 		cont = False
+		state = -1
 
-	return line, cont
+	return line, cont, state
 
-def read_reg(data, p):
+
+def create_frame(settings, line):
+	print(line)
+
+
+def read_reg(settings, p, state):
 	line = p.stdout.readline()
-	return line
+
+	if line:
+		if state == -2:
+			if 'Plateau' in line:
+				state = -1
+		elif state == -1:
+			state += 1
+		elif state < settings['board_dim_x']:
+			create_frame(settings, line.split(' ')[1])
+			state += 1
+		else:
+			state = -2
+
+	return line, state
 
 if __name__ == "__main__":
 	p = Popen(cmd, stdout=PIPE, shell=True)
 	settings = {}
 	init = True
+	state = -2
+	while init:
+		line, init, state = read_init(settings, p, state)
+
 	while True:
-		if init:
-			line, init = read_init(settings, p)
-		else:
-			line = read_reg(settings, p)
+		line, state = read_reg(settings, p, state)
 
 		if not line:
 			break
-
-
-
-
-
-
-
 
 
 
