@@ -13,13 +13,22 @@ __PLAYER_BINARY = "kprytkov.filler"
 cmd = "./resources/filler_vm -f resources/maps/map01 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler"
 
 
-COLOR_WHITE = (255, 255, 255)
-COLOR_BLUE = (0, 0, 128)
-COLOR_RED = (255, 0, 0)
+COLOR_BKG = (255, 255, 255)
+
+COLOR_PLAYER =            (66, 135, 245)
+COLOR_PLAYER_BORDER =     (0, 0, 0)
+COLOR_PLAYER_NEW =        (89, 147, 245)
+COLOR_PLAYER_NEW_BORDER = (255, 255, 255)
+
+COLOR_ENEMY =             (240, 99, 38)
+COLOR_ENEMY_BORDER =      (0, 0, 0)
+COLOR_ENEMY_NEW =         (237, 116, 64)
+COLOR_ENEMY_NEW_BORDER =  (255, 255, 255)
 
 surface = None
 board_w, board_h = None, None
 piece_w, piece_h = 20, 20
+padding_w, padding_h = 10, 10
 
 
 def read_init(data, p, state):
@@ -50,10 +59,32 @@ def create_frame(settings, board):
 
 	for i, line in enumerate(board):
 		for j, c in enumerate(c for c in line):
-			if c == 'X' or c == 'x':
-				pygame.draw.rect(surface, COLOR_BLUE, (j*piece_h, i*piece_w, piece_h, piece_w), 0)
-			if c == 'O' or c == 'o':
-				pygame.draw.rect(surface, COLOR_RED, (j*piece_h, i*piece_w, piece_h, piece_w), 0)
+			if c == 'X':
+				pygame.draw.rect(surface, COLOR_ENEMY,
+					(j*piece_h, i*piece_w, piece_h, piece_w), 0)
+				pygame.draw.rect(surface, COLOR_ENEMY_BORDER,
+					(j*piece_h, i*piece_w, piece_h, piece_w), 3)
+			elif c == 'x':
+				pygame.draw.rect(surface, COLOR_ENEMY_NEW,
+					(j*piece_h, i*piece_w, piece_h, piece_w), 0)
+				pygame.draw.rect(surface, COLOR_ENEMY_NEW_BORDER,
+					(j*piece_h, i*piece_w, piece_h, piece_w), 3)
+			if c == 'O':
+				pygame.draw.rect(surface, COLOR_PLAYER,
+					(j*piece_h, i*piece_w, piece_h, piece_w), 0)
+				#pygame.draw.rect(surface, COLOR_PLAYER_BORDER,
+				#	(padding_h + j*piece_h, padding_w + i*piece_w, piece_h, piece_w), 3)
+
+				pygame.draw.rect(surface, COLOR_PLAYER_BORDER,
+					(j*piece_h + (piece_h - 3), i*piece_w+1, 3, piece_w - 3 + 1), 3)
+
+				pygame.draw.rect(surface, COLOR_PLAYER_BORDER,
+					(j*piece_h+1, i*piece_w + (piece_h - 3), piece_h - 3 + 1, 3), 3)
+			elif c == 'o':
+				pygame.draw.rect(surface, COLOR_PLAYER_NEW,
+					(j*piece_h, i*piece_w, piece_h, piece_w), 0)
+				#pygame.draw.rect(surface, COLOR_PLAYER_NEW_BORDER,
+				#	(padding_h + j*piece_h, padding_w + i*piece_w, piece_h, piece_w), 3)
 	# 24, 40
 	# 24 * 20 = 480
 	# 40 * 20 = 800
@@ -117,9 +148,15 @@ if __name__ == "__main__":
 	pygame.init()
 	surface = pygame.display.set_mode((board_w, board_h))
 	pygame.display.set_caption("Filler")
-	surface.fill(COLOR_WHITE)
+	surface.fill(COLOR_BKG)
 
-	#test = False
+	#font = pygame.font.SysFont("comicsansms", 48)
+	#text = font.render("Test", True, (0, 128, 0))
+
+	bkg = pygame.image.load("space_hamster.png").convert()
+	bkg_rect = bkg.get_rect()
+	surface.blit(bkg, bkg_rect)
+
 	while True:
 		line, state = read_reg(settings, p, state)
 
@@ -129,9 +166,13 @@ if __name__ == "__main__":
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.quit()
-		#if not test:
-		pygame.display.update()
-		#test = True
+
+		#pygame.display.update()
+
+		#surface.blit(text, (100, 100))
+
+		pygame.display.flip()
+
 
 
 
