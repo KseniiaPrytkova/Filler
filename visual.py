@@ -1,12 +1,12 @@
 from subprocess import Popen, PIPE
 # $ pip install pygame
 import pygame
+import sys
+import random
 
 
 __PLAYER_BINARY = "kprytkov.filler"
-
-cmd = "./resources/filler_vm -f resources/maps/map01 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler"
-
+__FILLER_VM = "./resources/filler_vm"
 
 COLOR_BKG = (0, 0, 0)
 
@@ -24,7 +24,7 @@ BORDER_WIDTH = 3
 
 surface = None
 board_w, board_h = None, None
-piece_w, piece_h = 10, 10
+piece_w, piece_h = None, None
 
 
 def read_init(data, p, state):
@@ -50,13 +50,10 @@ def read_init(data, p, state):
 
 
 def create_frame(settings, board):
-	pass
-	import random
-	
-
 	for i, line in enumerate(board):
 		for j, c in enumerate(c for c in line):
-			if c == 'X':
+			if ((c == 'X' and settings['player_self_nm'] == 1) or
+			   (c == 'O' and settings['player_self_nm'] == 2)): 
 				_COLOR_ENEMY = (COLOR_ENEMY[0] + random.randint(-10,10),
 					COLOR_ENEMY[1] + random.randint(-10,10),
 					COLOR_ENEMY[2] + random.randint(-10,10))
@@ -77,13 +74,15 @@ def create_frame(settings, board):
 					BORDER_WIDTH),
 				BORDER_WIDTH)
 
-			elif c == 'x':
+			elif ((c == 'x' and settings['player_self_nm'] == 1) or
+			   (c == 'o' and settings['player_self_nm'] == 2)): 
 				pygame.draw.rect(surface, COLOR_ENEMY_NEW,
 					(j*piece_h, i*piece_w, piece_h, piece_w), 0)
 				pygame.draw.rect(surface, COLOR_ENEMY_NEW_BORDER,
 					(j*piece_h+1, i*piece_w+1, piece_h-2, piece_w-2), BORDER_WIDTH)
 
-			if c == 'O':
+			elif ((c == 'O' and settings['player_self_nm'] == 1) or
+			   (c == 'X' and settings['player_self_nm'] == 2)): 
 				_COLOR_PLAYER = (COLOR_PLAYER[0] + random.randint(-10,10),
 					COLOR_PLAYER[1] + random.randint(-10,10),
 					COLOR_PLAYER[2] + random.randint(-10,10))
@@ -103,8 +102,9 @@ def create_frame(settings, board):
 					piece_h - BORDER_WIDTH + 1,
 					BORDER_WIDTH),
 				BORDER_WIDTH)
-			
-			elif c == 'o':
+
+			elif ((c == 'o' and settings['player_self_nm'] == 1) or
+			   (c == 'x' and settings['player_self_nm'] == 2)): 
 				pygame.draw.rect(surface, COLOR_PLAYER_NEW,
 					(j*piece_h, i*piece_w, piece_h, piece_w), 0)
 				pygame.draw.rect(surface, COLOR_PLAYER_NEW_BORDER,
@@ -132,6 +132,8 @@ def read_reg(settings, p, state):
 	return line, state
 
 if __name__ == "__main__":
+	cmd = __FILLER_VM + ' ' + " ".join(sys.argv[1:])
+
 	p = Popen(cmd, stdout=PIPE, shell=True)
 	settings = {}
 	init = True
@@ -139,16 +141,27 @@ if __name__ == "__main__":
 	while init:
 		line, init, state = read_init(settings, p, state)
 
+	WINDOW_MAX_W = 1000
+	WINDOW_MAX_H = 800
+
+	piece_w = WINDOW_MAX_W / settings['board_dim_y']
+	piece_h = WINDOW_MAX_H / settings['board_dim_x']
+
+	min_piece = min(piece_w, piece_h)
+	piece_w, piece_h = min_piece, min_piece
+	print("piece_w: " + str(piece_w))
+	print("piece_h: " + str(piece_h))
+
+	# 800, 800
+
 	board_w, board_h = settings['board_dim_y'] * piece_w, settings['board_dim_x'] * piece_h
 	pygame.init()
 	surface = pygame.display.set_mode((board_w, board_h))
-	pygame.display.set_caption("Filler")
+	pygame.display.set_caption("Filler (blue: kprytkov, red: {}) (board: {} x {})".format(
+		settings['player_enemy_name'], settings['board_dim_y'], settings['board_dim_x']))
 	surface.fill(COLOR_BKG)
 
-	#font = pygame.font.SysFont("comicsansms", 48)
-	#text = font.render("Test", True, (0, 128, 0))
-
-	bkg = pygame.image.load("space_hamster.png")#.convert()
+	bkg = pygame.image.load("space_hamster.png")
 	bkg = pygame.transform.scale(bkg, (board_w, board_h))
 	bkg_rect = bkg.get_rect()
 	surface.blit(bkg, bkg_rect)
@@ -163,62 +176,9 @@ if __name__ == "__main__":
 			if event.type == pygame.QUIT:
 				pygame.quit()
 
-		#pygame.display.update()
-
-		#surface.blit(text, (100, 100))
-
 		pygame.display.flip()
 
-
-
-
-
-'''launched ./kprytkov.filler
-$$$ exec p1 : [./kprytkov.filler]
-launched ./resources/players/superjeannot.filler
-$$$ exec p2 : [./resources/players/superjeannot.filler]
-Plateau 15 17:
-    01234567890123456
-000 .................
-001 .................
-002 .................
-003 .................
-004 .................
-005 .................
-006 .................
-007 .................
-008 ..O..............
-009 .................
-010 .................
-011 .................
-012 ..............X..
-013 .................
-014 .................
-Piece 1 3:
-.**
-<got (O): [8, 1]
-Plateau 15 17:
-    01234567890123456
-000 .................
-001 .................
-002 .................
-003 .................
-004 .................
-005 .................
-006 .................
-007 .................
-008 ..oo.............
-009 .................
-010 .................
-011 .................
-012 ..............X..
-013 .................
-014 .................
-Piece 1 3:
-.**
-<got (X): [12, 12]'''
-
-#print(str(settings))
-## $$$ exec p1 : [./kprytkov.filler]
-## launched ./resources/players/superjeannot.filler
-## $$$ exec p2 : [./resources/players/superjeannot.filler]
+	#while True:
+	#	for event in pygame.event.get():
+	#		if event.type == pygame.QUIT:
+	#			break
