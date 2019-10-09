@@ -3,19 +3,9 @@
 from subprocess import Popen, PIPE
 
 
-import numpy as np
-import matplotlib
-#matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-from matplotlib import animation
-from matplotlib.animation import FFMpegWriter
-import time
-#from IPython import display
-import random
+# $ pip install pygame
+import pygame
 
-#import matplotlib.animation as animation
-#import numpy as np
-#from pylab import *
 
 
 __PLAYER_BINARY = "kprytkov.filler"
@@ -23,7 +13,13 @@ __PLAYER_BINARY = "kprytkov.filler"
 cmd = "./resources/filler_vm -f resources/maps/map01 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler"
 
 
-#plt.axis([0, 10, 0, 1])
+COLOR_WHITE = (255, 255, 255)
+COLOR_BLUE = (0, 0, 128)
+COLOR_RED = (255, 0, 0)
+
+surface = None
+board_w, board_h = None, None
+piece_w, piece_h = 20, 20
 
 
 def read_init(data, p, state):
@@ -52,7 +48,20 @@ count = 0
 def create_frame(settings, board):
 	pass
 
-	xs_empty, ys_empty = [], []
+	for i, line in enumerate(board):
+		for j, c in enumerate(c for c in line):
+			if c == 'X' or c == 'x':
+				pygame.draw.rect(surface, COLOR_BLUE, (j*piece_h, i*piece_w, piece_h, piece_w), 0)
+			if c == 'O' or c == 'o':
+				pygame.draw.rect(surface, COLOR_RED, (j*piece_h, i*piece_w, piece_h, piece_w), 0)
+	# 24, 40
+	# 24 * 20 = 480
+	# 40 * 20 = 800
+	#pygame.draw.rect(surface, COLOR_BLUE, (0, 0, 20, 20), 0)
+	#pygame.draw.rect(surface, COLOR_BLUE, (780, 460, 20, 20), 0)
+				#pygame.draw.rect(surface, COLOR_BLUE, (i, j, piece_w, piece_h))
+
+	'''xs_empty, ys_empty = [], []
 	xs_player, ys_player = [], []
 	xs_enemy, ys_enemy = [], []
 
@@ -68,22 +77,9 @@ def create_frame(settings, board):
 				xs_empty += [i]
 				ys_empty += [j]
 
-	#plt.clear()
 	plt.plot(xs_player, ys_player, 's', color='green', alpha=0.5)
 	plt.plot(xs_enemy, ys_enemy, 's', color='red', alpha=0.5)
-	plt.pause(0.02)
-
-
-	#print(str(board) + '\n')
-	#for e in board:
-	#	print(e)
-	#print('\n')
-
-	#y = np.random.random()
-	#plt.scatter(count, y)
-	#plt.pause(0.05)
-
-	#count += 1
+	plt.pause(0.02)'''
 
 
 def read_reg(settings, p, state):
@@ -115,14 +111,27 @@ if __name__ == "__main__":
 	while init:
 		line, init, state = read_init(settings, p, state)
 
-	plt.axis([-0.5, settings['board_dim_y']+0.5, -0.5, settings['board_dim_x']+0.5])
+	#plt.axis([-0.5, settings['board_dim_y']+0.5, -0.5, settings['board_dim_x']+0.5])
 
+	board_w, board_h = settings['board_dim_y'] * piece_w, settings['board_dim_x'] * piece_h
+	pygame.init()
+	surface = pygame.display.set_mode((board_w, board_h))
+	pygame.display.set_caption("Filler")
+	surface.fill(COLOR_WHITE)
+
+	#test = False
 	while True:
 		line, state = read_reg(settings, p, state)
 
 		if not line:
 			break
-	plt.pause(2.0)
+
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+		#if not test:
+		pygame.display.update()
+		#test = True
 
 
 
@@ -172,7 +181,7 @@ Piece 1 3:
 .**
 <got (X): [12, 12]'''
 
-print(str(settings))
+#print(str(settings))
 ## $$$ exec p1 : [./kprytkov.filler]
 ## launched ./resources/players/superjeannot.filler
 ## $$$ exec p2 : [./resources/players/superjeannot.filler]

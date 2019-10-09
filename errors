@@ -1,0 +1,274 @@
+
+
+#### p2 vs superjeannot, map00
+
+Plateau 15 17:
+    01234567890123456
+000 .................
+001 .................
+002 .................
+003 .................
+004 .................
+005 .................
+006 ......OOOOOOOoo..
+007 .....OOOOOOOOOO..
+008 XXOOOOOOOOOOOOOO.
+009 XXXX.OOOOOOOOOOOO
+010 .XXXXXOXXOXXOOOXX
+011 .XXXXXXXXXXXXXXXX
+012 .....XXX.XXXXXXXX
+013 ......X......XXX.
+014 .................
+Piece 2 2:
+*.
+**
+<got (X): [10, 0]
+Plateau 15 17:
+    01234567890123456
+000 .................
+001 .................
+002 .................
+003 .................
+004 .................
+005 .................
+006 ......OOOOOOOOO..
+007 .....OOOOOOOOOO..
+008 XXOOOOOOOOOOOOOO.
+009 XXXX.OOOOOOOOOOOO
+010 xXXXXXOXXOXXOOOXX
+011 xxXXXXXXXXXXXXXXX
+012 .....XXX.XXXXXXXX
+013 ......X......XXX.
+014 .................
+Piece 2 3:
+**.
+***
+<got (O): [5, 14]
+Plateau 15 17:
+    01234567890123456
+000 .................
+001 .................
+002 .................
+003 .................
+004 .................
+005 ..............oo.
+006 ......OOOOOOOOooo
+007 .....OOOOOOOOOO..
+008 XXOOOOOOOOOOOOOO.
+009 XXXX.OOOOOOOOOOOO
+010 XXXXXXOXXOXXOOOXX
+011 XXXXXXXXXXXXXXXXX
+012 .....XXX.XXXXXXXX
+013 ......X......XXX.
+014 .................
+Piece 3 5:
+..**.
+***..
+.....
+<got (X): [10, 0]
+
+
+
+
+#### p2 vs abanlin, map00
+
+Plateau 15 17:
+    01234567890123456
+000 OOOOOOOOOOOOOOOOX
+001 OOOOOOOOOOOOOOOOX
+002 OOOOOOOOOOOOOOOOX
+003 OOOOOOOOOOXXXXXXX
+004 OOOOOOOOOOXXXXXXX
+005 OOOOOOOOOOOXXXXXX
+006 OOOOOOOOOOOXXXXXX
+007 OOOOOOOOOOOOXXXXX
+008 OOOXXXXXXXXXXXXxx
+009 XXXXXXXXXXXXXXXX.
+010 XXXXXXXXXXXXXXXX.
+011 XXXXXXXXXXXXXXXX.
+012 XXXXXXXXXXXXXXXX.
+013 XXXXXXXXXXXXXX.X.
+014 XXXXXXXXXXXXXX...
+Piece 2 2:
+**
+**
+<got (X): [13, 14]
+Plateau 15 17:
+    01234567890123456
+000 OOOOOOOOOOOOOOOOX
+001 OOOOOOOOOOOOOOOOX
+002 OOOOOOOOOOOOOOOOX
+003 OOOOOOOOOOXXXXXXX
+004 OOOOOOOOOOXXXXXXX
+005 OOOOOOOOOOOXXXXXX
+006 OOOOOOOOOOOXXXXXX
+007 OOOOOOOOOOOOXXXXX
+008 OOOXXXXXXXXXXXXXX
+009 XXXXXXXXXXXXXXXX.
+010 XXXXXXXXXXXXXXXX.
+011 XXXXXXXXXXXXXXXX.
+012 XXXXXXXXXXXXXXXX.
+013 XXXXXXXXXXXXXXxx.
+014 XXXXXXXXXXXXXXxx.
+Piece 4 3:
+...
+.**
+.**
+***
+<got (X): [13, 14]
+An error occured. aborting...
+
+
+
+
+#### p2 vs abanlin, map00
+
+<got (X): [6, 16]
+Plateau 15 17:
+    01234567890123456
+000 XXXXXXXXXXXXXXXXX
+001 XXXXXXXXXXXXXXXXX
+002 XXXXXXXXXXXXXXXXX
+003 XXXXXXXXXXXXXXXXX
+004 XXXXXXXXXXXXXXXXX
+005 XXXXXXXXXXXXXXXXX
+006 XOXXXXXXXXXXXXXXx
+007 XOOXXXXXXXXXXXXXx
+008 XXOXXXXXXXXXXXXXX
+009 XXXXXXXXXXXXXXXXX
+010 XXXXXXXXXXXXXXXXX
+011 XXXXXXXXXXXXXXXXX
+012 XXXXXXXXXXXXXXXXX
+013 XXXXXXXXXXXXXXXXX
+014 XXXXXXXXXXXXXXXXX
+Piece 1 2:
+**
+<got (X): [6, 16]
+Plateau 15 17:
+    01234567890123456
+000 XXXXXXXXXXXXXXXXX
+001 XXXXXXXXXXXXXXXXX
+002 XXXXXXXXXXXXXXXXX
+003 XXXXXXXXXXXXXXXXX
+004 XXXXXXXXXXXXXXXXX
+005 XXXXXXXXXXXXXXXXX
+006 XOXXXXXXXXXXXXXXxx
+007 XOOXXXXXXXXXXXXXX
+008 XXOXXXXXXXXXXXXXX
+009 XXXXXXXXXXXXXXXXX
+010 XXXXXXXXXXXXXXXXX
+011 XXXXXXXXXXXXXXXXX
+012 XXXXXXXXXXXXXXXXX
+013 XXXXXXXXXXXXXXXXX
+014 XXXXXXXXXXXXXXXXX
+Piece 1 2:
+**
+<got (X): [6, 16]
+
+One piece is placed here outside the boundaries.
+Checked the boundary checks in the points calc function
+and it works fine.
+The problem here is that in the last iteration, the
+program cannot find a solution, which means that it will
+just repeat the previous one, which is [6, 16] and that just
+happens to work on the board.
+TODO: if no placement is found, use [0, 0].
+
+
+
+
+#### p2 vs abanlin, map00
+
+Plateau 15 17:
+    01234567890123456
+000 .................
+001 .................
+002 .................
+003 .................
+004 .................
+005 .o...............
+006 .oO..............
+007 ..O..............
+008 ..O..............
+009 .................
+010 .................
+011 ............XXX..
+012 .............XX..
+013 .................
+014 .................
+Piece 1 3:
+***
+<got (X): [11, 10]
+Plateau 15 17:
+    01234567890123456
+000 .................
+001 .................
+002 .................
+003 .................
+004 .................
+005 .O...............
+006 .OO..............
+007 ..O..............
+008 ..O..............
+009 .................
+010 .................
+011 ..........xxxXX..
+012 .............XX..
+013 .................
+014 .................
+Piece 2 2:
+**
+..
+<got (O): [5, 0]
+Plateau 15 17:
+    01234567890123456
+000 .................
+001 .................
+002 .................
+003 .................
+004 .................
+005 oo...............
+006 .OO..............
+007 ..O..............
+008 ..O..............
+009 .................
+010 .................
+011 ..........XXXXX..
+012 .............XX..
+013 .................
+014 .................
+Piece 3 9:
+.....***.
+.....**..
+.........
+<got (X): [11, 10]
+
+It seems it cannot find a solution, so it just repeats the
+previous one.
+There is a solution here however.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

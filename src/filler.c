@@ -187,7 +187,7 @@ int piece_get_placement(t_init *initial, char **piece, int n, char board[][n], F
 		while (++j < initial->x_plateau)
 		{
 			// Player point.
-			if ((board[j][i] == -99))
+			if (board[j][i] == -99)
 			{
 				initial->temp_x = j;
 				initial->temp_y = i;
@@ -218,7 +218,6 @@ int main(void)
 {
 	t_init *initial = NULL;
 	char **piece = NULL;
-	// int i = 0;
 
 	if (!(initial = (t_init *)malloc(sizeof(t_init))))
 	{
@@ -229,29 +228,14 @@ int main(void)
 
 	init_structure(initial);
 
-/* INIT */
 	get_player_nb(initial);
-	/* del me */
 	if (initial->figure == 'o')
-	{
-		fprintf(fptr, "we are pl № 1; USE: %c\n", initial->figure);
-		fprintf(fptr, "or: %c\n", initial->figure - 32 );
 		initial->enemy_figure = 'x';
-	}
 	else if (initial->figure == 'x')
-	{
-		fprintf(fptr, "we are pl № 2; USE: %c\n", initial->figure);
-		fprintf(fptr, "or: %c\n", initial->figure - 32 );
 		initial->enemy_figure = 'o';
-	}
-	/* ------- */
 	get_arr_dim(initial);
-	/* del me */
-	fprintf(fptr, "Y = %d; X = %d\n",initial->y_plateau, initial->x_plateau);
-	/* ------- */
 
 	char board[initial->x_plateau][initial->y_plateau];
-
 	while (1)
 	{
 		fprintf(fptr, "## read_the_map()\n");

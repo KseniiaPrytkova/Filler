@@ -15,12 +15,10 @@ void get_player_nb(t_init *initial)
 	else if (str[10] == '2')
 		figure = 'x';
 	else
-	// if (str[10] != '1' && str[10] != '2')
 	{
 		perror("Error with reading the player number: ");
 		figure = '\0';
 	}
-	// fprintf(fptr, "character is: and pl_nb is: %c %c\n", figure, str[10]);
 	initial->figure = figure;
 	ft_strdel(&str);
 }

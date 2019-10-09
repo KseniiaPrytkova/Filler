@@ -1,6 +1,4 @@
-seed = 7534
-./kprytkov.filler: Segfault at 3
-X: error on input
-./resources/players/superjeannot.filler won
+seed = 8066
+./kprytkov.filler won
 Score:
-3AGAINST9
+239AGAINST77

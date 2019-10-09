@@ -5,11 +5,10 @@ SRC_PROJECT = src/filler.c \
             	src/init_part.c \
 				src/create_hot_map.c \
 				src/make_decision_part.c \
-			# ./srcs/algorithm.c \
-			# ./srcs/heat_map_fillers.c 
 
 #OBJECT_PROJECT = $(SRC_PROJECT:.c=.o)
-FLAGS = -O3 -Wall -Wextra -Werror -Iinclude/ -Ilibft/ -Llibft/ -lft
+#FLAGS = -O3 -Wall -Wextra -Werror -Iinclude/ -Ilibft/ -Llibft/ -lft
+FLAGS = -O3 -Wall -Wextra -Iinclude/ -Ilibft/ -Llibft/ -lft
 
 
 all: $(NAME)
