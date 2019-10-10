@@ -7,8 +7,7 @@ SRC_PROJECT = src/filler.c \
 				src/make_decision_part.c \
 
 #OBJECT_PROJECT = $(SRC_PROJECT:.c=.o)
-#FLAGS = -O3 -Wall -Wextra -Werror -Iinclude/ -Ilibft/ -Llibft/ -lft
-FLAGS = -O3 -Wall -Wextra -Iinclude/ -Ilibft/ -Llibft/ -lft
+FLAGS = -O3 -Wall -Wextra -Werror -Iinclude/ -Ilibft/ -Llibft/ -lft
 
 
 all: $(NAME)

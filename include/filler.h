@@ -60,5 +60,6 @@ void get_arr_dim(t_init *initial);
 int read_the_map(t_init *initial, int n, char board[][n]);
 void read_the_piece(t_init **initial, char ***piece);
 void create_hot_board(t_init *initial, int n, char board[][n]);
+int piece_get_placement(t_init *initial, char **piece, int n, char board[][n]);
 
 #endif

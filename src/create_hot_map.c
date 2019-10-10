@@ -1,5 +1,6 @@
 #include "filler.h"
 
+
 void catch_next(t_init *initial, int i, int j, int n, char board[][n])
 {
 	int temp_i = i;
