@@ -8,7 +8,7 @@ import random
 __PLAYER_BINARY = "kprytkov.filler"
 __FILLER_VM = "./resources/filler_vm"
 
-COLOR_BKG = (0, 0, 0)
+COLOR_BKG = (255, 255, 255)
 
 COLOR_PLAYER =            (66, 135, 245)
 COLOR_PLAYER_BORDER =     (17, 36, 66)
@@ -42,7 +42,6 @@ def read_init(data, p, state):
 	if 'Plateau' in line:
 		settings['board_dim_x'] = int(line.split(' ')[1])
 		settings['board_dim_y'] = int(line.split(' ')[2][:-2])
-		print("board x, y: {}, {}".format(settings['board_dim_x'], settings['board_dim_y']))
 		cont = False
 		state = -1
 
@@ -54,9 +53,11 @@ def create_frame(settings, board):
 		for j, c in enumerate(c for c in line):
 			if ((c == 'X' and settings['player_self_nm'] == 1) or
 			   (c == 'O' and settings['player_self_nm'] == 2)): 
-				_COLOR_ENEMY = (COLOR_ENEMY[0] + random.randint(-10,10),
-					COLOR_ENEMY[1] + random.randint(-10,10),
-					COLOR_ENEMY[2] + random.randint(-10,10))
+				_COLOR_ENEMY = (
+					min(max(COLOR_ENEMY[0] + random.randint(-8,8), 0), 255),
+					min(max(COLOR_ENEMY[1] + random.randint(-8,8), 0), 255),
+					min(max(COLOR_ENEMY[2] + random.randint(-8,8), 0), 255)
+					)
 
 				pygame.draw.rect(surface, _COLOR_ENEMY,
 					(j*piece_h, i*piece_w, piece_h, piece_w), 0)
@@ -83,9 +84,11 @@ def create_frame(settings, board):
 
 			elif ((c == 'O' and settings['player_self_nm'] == 1) or
 			   (c == 'X' and settings['player_self_nm'] == 2)): 
-				_COLOR_PLAYER = (COLOR_PLAYER[0] + random.randint(-10,10),
-					COLOR_PLAYER[1] + random.randint(-10,10),
-					COLOR_PLAYER[2] + random.randint(-10,10))
+				_COLOR_PLAYER = (
+					min(max(COLOR_PLAYER[0] + random.randint(-8,8), 0), 255),
+					min(max(COLOR_PLAYER[1] + random.randint(-8,8), 0), 255),
+					min(max(COLOR_PLAYER[2] + random.randint(-8,8), 0), 255)
+					)
 
 				pygame.draw.rect(surface, _COLOR_PLAYER,
 					(j*piece_h, i*piece_w, piece_h, piece_w), 0)
@@ -110,6 +113,7 @@ def create_frame(settings, board):
 				pygame.draw.rect(surface, COLOR_PLAYER_NEW_BORDER,
 					(j*piece_h+1, i*piece_w+1, piece_h-2, piece_w-2), BORDER_WIDTH)
 
+
 def read_reg(settings, p, state):
 	line = p.stdout.readline()
 
@@ -131,6 +135,7 @@ def read_reg(settings, p, state):
 
 	return line, state
 
+
 if __name__ == "__main__":
 	cmd = __FILLER_VM + ' ' + " ".join(sys.argv[1:])
 
@@ -149,10 +154,6 @@ if __name__ == "__main__":
 
 	min_piece = min(piece_w, piece_h)
 	piece_w, piece_h = min_piece, min_piece
-	print("piece_w: " + str(piece_w))
-	print("piece_h: " + str(piece_h))
-
-	# 800, 800
 
 	board_w, board_h = settings['board_dim_y'] * piece_w, settings['board_dim_x'] * piece_h
 	pygame.init()
@@ -160,11 +161,6 @@ if __name__ == "__main__":
 	pygame.display.set_caption("Filler (blue: kprytkov, red: {}) (board: {} x {})".format(
 		settings['player_enemy_name'], settings['board_dim_y'], settings['board_dim_x']))
 	surface.fill(COLOR_BKG)
-
-	bkg = pygame.image.load("space_hamster.png")
-	bkg = pygame.transform.scale(bkg, (board_w, board_h))
-	bkg_rect = bkg.get_rect()
-	surface.blit(bkg, bkg_rect)
 
 	while True:
 		line, state = read_reg(settings, p, state)
@@ -177,8 +173,3 @@ if __name__ == "__main__":
 				pygame.quit()
 
 		pygame.display.flip()
-
-	#while True:
-	#	for event in pygame.event.get():
-	#		if event.type == pygame.QUIT:
-	#			break
