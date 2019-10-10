@@ -51,6 +51,8 @@ typedef struct	s_init
 	int temp_y_2;
 	int temp_x_3;
 	int temp_y_3;
+	int temp_x_4;
+	int temp_y_4;
 
 	// Hotmap: store the distribution of player points.
 	int player_points_nm;

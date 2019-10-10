@@ -1,7 +1,5 @@
 #include "filler.h"
 
-
-
 void piece_calc_points_handle(t_init *initial, char **piece, int n,
 	char board[][n], int *points_best)
 {
