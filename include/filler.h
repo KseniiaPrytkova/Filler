@@ -53,15 +53,12 @@ typedef struct	s_init
 	int player_points_nm;
 	int player_points_x;
 	int player_points_y;
-	int enemy_points_nm;
-	int enemy_points_x;
-	int enemy_points_y;
 } 				t_init;
 
 void get_player_nb(t_init *initial);
 void get_arr_dim(t_init *initial);
-int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr);
-void read_the_piece(t_init **initial, char ***piece, FILE *fptr);
-void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr);
+int read_the_map(t_init *initial, int n, char board[][n]);
+void read_the_piece(t_init **initial, char ***piece);
+void create_hot_board(t_init *initial, int n, char board[][n]);
 
 #endif

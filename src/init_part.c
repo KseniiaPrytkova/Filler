@@ -63,7 +63,7 @@ void get_arr_dim(t_init *initial)
 	dim_reader(str, &initial->x_plateau, &initial->y_plateau);
 }
 
-int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
+int read_the_map(t_init *initial, int n, char board[][n])
 {
 	int i;
 	int j;
@@ -74,55 +74,50 @@ int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 	j = 0;
 	catch = 0;
 
+	get_next_line_fl(0, &str);
+	if (str == NULL)
+	{
+		// a null string from the filter vm
+		// ends the game.
+		return (0);
+	}
+	else if (str[0] == 'P' && str[1] == 'l')
+	{
+		// If line is "Plateau ..." here.
+		ft_strdel(&str);
 		get_next_line_fl(0, &str);
-		if (str == NULL)
+	}
+	else if (str[0] != ' ' && str[1] != ' ' && str[2] != ' ')
+	{
+		return (0);
+	}
+	ft_strdel(&str);
+	// Read board data line by line into
+	// board array.
+	while (i < initial->y_plateau)
+	{
+		get_next_line_fl(0, &str);
+		char *line = ft_strsplit(str, ' ')[1];
+		int j = 0;
+		while (j < initial->x_plateau)
 		{
-			// a null string from the filter vm
-			// ends the game.
-			return (0);
-		}
-		else if (str[0] == 'P' && str[1] == 'l')
-		{
-			// If line is "Plateau ..." here.
-			ft_strdel(&str);
-			get_next_line_fl(0, &str);
-		}
-		else if (str[0] == ' ' && str[1] == ' ' && str[2] == ' ')
-		{
-			
-		}
-		else
-		{
-			return (0);
+			board[j][i] = line[j];
+			if (((board[j][i] == initial->enemy_figure) || (board[j][i] == initial->enemy_figure - 32)) && !catch)
+			{
+				initial->opp_x_curr = j;
+				initial->opp_y_curr = i;
+				catch = 1;
+			}
+			j++;
 		}
 		ft_strdel(&str);
-		// Read board data line by line into
-		// board array.
-		while (i < initial->y_plateau)
-		{
-			get_next_line_fl(0, &str);
-			char *line = ft_strsplit(str, ' ')[1];
-			int j = 0;
-			while (j < initial->x_plateau)
-			{
-				board[j][i] = line[j];
-				if (((board[j][i] == initial->enemy_figure) || (board[j][i] == initial->enemy_figure - 32)) && !catch)
-				// if ((board[j][i] == 'X' || board[j][i] == 'x') && !catch)
-				{
-					initial->opp_x_curr = j;
-					initial->opp_y_curr = i;
-					catch = 1;
-				}
-				j++;
-			}
-			ft_strdel(&str);
-			i++;
-		}
+		i++;
+	}
 
 	return (1);
 }
 
-void read_the_piece(t_init **initial, char ***piece, FILE *fptr)
+void read_the_piece(t_init **initial, char ***piece)
 {
 	int i;
 	int j;

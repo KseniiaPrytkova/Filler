@@ -1,6 +1,6 @@
 #include "filler.h"
 
-void catch_next(t_init *initial, int i, int j, int n, char board[][n], FILE *fptr)
+void catch_next(t_init *initial, int i, int j, int n, char board[][n])
 {
 	int temp_i = i;
 	int temp_j = j;
@@ -82,44 +82,37 @@ static void take_care_of_yourself(t_init *initial, int i, int j)
 	}				
 }
 
-void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
+void create_hot_board(t_init *initial, int n, char board[][n])
 {
-	int i = 0;
-	int j = 0;
-
+	int i;
+	int j;
 	int delta_x = 0;
 	int delta_y = 0;
 
 	initial->player_points_nm = 0;
 	initial->player_points_x = 0;
 	initial->player_points_y = 0;
-	initial->enemy_points_nm = 0;
-	initial->enemy_points_x = 0;
-	initial->enemy_points_y = 0;
 
 	initial->is_one_piece = -1;
 	initial->i_was = 0;
-	while (i < initial->y_plateau)
+	i = -1;
+	while (++i < initial->y_plateau)
 	{
-		j = 0;
 		if (initial->i_was > 0)
 		{
 			initial->opp_x_curr = initial->opp_x_next;
 			initial->opp_y_curr = initial->opp_y_next;
 		}
-		while (j < initial->x_plateau)
+		j = -1;
+		while (++j < initial->x_plateau)
 		{
 			if ( (board[j][i] == initial->enemy_figure) || (board[j][i] == initial->enemy_figure - 32))
 			{
 				board[j][i] = 99;
 
-				initial->enemy_points_nm++;
-				initial->enemy_points_x += j;
-				initial->enemy_points_y += i;
-
 				if (j == initial->opp_x_curr && i == initial->opp_y_curr && initial->is_one_piece == -1)
 				{
-					catch_next(initial, i, j, initial->y_plateau, board, fptr);
+					catch_next(initial, i, j, initial->y_plateau, board);
 				}
 
 				if (initial->opp_y_next == initial->opp_y_curr)
@@ -127,7 +120,6 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 					initial->opp_x_curr = initial->opp_x_next;
 					initial->opp_y_curr = initial->opp_y_next;
 				}
-				j++;
 			}
 			else if ( (board[j][i] == initial->figure) || (board[j][i] == initial->figure - 32))
 			{
@@ -137,17 +129,12 @@ void create_hot_board(t_init *initial, int n, char board[][n], FILE *fptr)
 				initial->player_points_nm++;
 				initial->player_points_x += j;
 				initial->player_points_y += i;
-
-				j++;
 			}
 			else
 			{
 				if ((board[j][i] = (delta_x = count_delta_x(initial, delta_x, j)) + (delta_y = count_delta_y(initial, delta_y, i))) < 1)
 					board[j][i] *= -1;
-			
-				j++;
 			}
 		}
-		i++;
 	}
 }

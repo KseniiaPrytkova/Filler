@@ -1,7 +1,5 @@
 #include "filler.h"
 
-// TEMP:
-// #include <time.h>
 #include <stdint.h>
 #include <inttypes.h>
 
@@ -38,7 +36,7 @@ void piece_cleaner(t_init *initial, char **piece)
 }
 
 // x and y is here the coordinates where to place the piece.
-int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n], int x, int y, FILE *fptr)
+int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n], int x, int y)
 {
 	int i = -1;
 	int j;
@@ -62,9 +60,6 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 	int avg_y = initial->player_points_y / initial->player_points_nm;
 	int mid_x = initial->x_plateau / 2;
 
-	int avg_e_x = initial->enemy_points_x / initial->enemy_points_nm;
-	int avg_e_y = initial->enemy_points_y / initial->enemy_points_nm;
-
 	// Right field - want to move to the left field.
 	if (avg_x >= mid_x)
 	{
@@ -83,18 +78,6 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 	{
 		points -= y * GRAV_FACTOR_Y;
 	}
-
-	// ENEMY POS FACTOR.
-	int delta_x = avg_x - avg_e_x;
-	int delta_y = avg_y - avg_e_y;
-
-	// ex: enemy: 10, 10
-	//     p:     20, 10
-	// d_x = 10
-	// d_y = 0
-	
-
-
 
 
 	// HEAT MAP.
@@ -124,7 +107,6 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 					points += board[x+j][y+i];
 				}
 			}
-
 		}
 	}
 	if (nm_player != 1) {
@@ -134,7 +116,7 @@ int piece_calc_points_bis(t_init *initial, char **piece, int n, char board[][n],
 	return points;
 }
 
-int piece_calc_points(t_init *initial, char **piece, int n, char board[][n], FILE *fptr)
+int piece_calc_points(t_init *initial, char **piece, int n, char board[][n])
 {
 	// start in the upper left corner and loop down.
 	int x;
@@ -157,7 +139,7 @@ int piece_calc_points(t_init *initial, char **piece, int n, char board[][n], FIL
 				continue;
 
 			points_new = piece_calc_points_bis(initial, piece, n, board,
-				x, y, fptr);
+				x, y);
 			if (points_new < points_best)
 			{
 				points_best = points_new;
@@ -171,7 +153,7 @@ int piece_calc_points(t_init *initial, char **piece, int n, char board[][n], FIL
 	return points_best;
 }
 
-int piece_get_placement(t_init *initial, char **piece, int n, char board[][n], FILE *fptr)
+int piece_get_placement(t_init *initial, char **piece, int n, char board[][n])
 {
 	int i = -1;
 	int j;
@@ -191,12 +173,9 @@ int piece_get_placement(t_init *initial, char **piece, int n, char board[][n], F
 			{
 				initial->temp_x = j;
 				initial->temp_y = i;
-				points_new = piece_calc_points(initial, piece, n, board, fptr);
+				points_new = piece_calc_points(initial, piece, n, board);
 				if (points_new < points_best)
 				{
-					fprintf(fptr, "points_new: %d < %d\n",
-						points_new, points_best);
-					fflush(fptr);
 					points_best = points_new;
 					initial->definitive_x = initial->temp_x;
 					initial->definitive_y = initial->temp_y;
@@ -204,13 +183,6 @@ int piece_get_placement(t_init *initial, char **piece, int n, char board[][n], F
 			}
 		}
 	}
-	// If no placement could be found.
-	/*if (points_best == POINTS_INF)
-	{
-		fprintf(fptr, "  No solution found - return 0\n");
-		fflush(fptr);
-		return (0);
-	}*/
 	return (1);
 }
 
@@ -224,7 +196,6 @@ int main(void)
 		perror("Error: ");
 		return (0);
 	}
-	FILE *fptr = fopen("TRUSTEE.txt", "w");
 
 	init_structure(initial);
 
@@ -238,23 +209,13 @@ int main(void)
 	char board[initial->x_plateau][initial->y_plateau];
 	while (1)
 	{
-		fprintf(fptr, "## read_the_map()\n");
-		fflush(fptr);
-		if (!read_the_map(initial, initial->y_plateau, board, fptr))
+		if (!read_the_map(initial, initial->y_plateau, board))
 		{
 			break;
 		}
-		fprintf(fptr, "## read_the_piece()\n");
-		fflush(fptr);
-		read_the_piece(&initial, &piece, fptr);
-
-		fprintf(fptr, "## create_hot_board()\n");
-		fflush(fptr);
-		create_hot_board(initial, initial->y_plateau, board, fptr);
-
-		fprintf(fptr, "## piece_get_placement()\n");
-		fflush(fptr);
-		if (!piece_get_placement(initial, piece, initial->y_plateau, board, fptr))
+		read_the_piece(&initial, &piece);
+		create_hot_board(initial, initial->y_plateau, board);
+		if (!piece_get_placement(initial, piece, initial->y_plateau, board))
 		{
 			fprintf(stdout, "0 0\n");
 			fflush(stdout);
@@ -262,13 +223,9 @@ int main(void)
 		}
 
 		// Print coordinates to stdout for the filler VM.
-		fprintf(fptr, "---- PLACEMENT: %d, %d\n\n",initial->definitive_x, initial->definitive_y);
-		fflush(fptr);
-
 		fprintf(stdout, "%d %d\n", initial->definitive_y, initial->definitive_x);
 		fflush(stdout);
 	}
-	fclose(fptr);
 	if (piece != NULL)
 		piece_cleaner(initial, piece);
 	free(initial);
