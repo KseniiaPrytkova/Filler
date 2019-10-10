@@ -67,7 +67,8 @@ int main(void)
 		piece_get_placement(initial, piece, initial->y_plateau, board);
 
 		// Print coordinates to stdout for the filler VM.
-		fprintf(stdout, "%d %d\n", initial->definitive_y, initial->definitive_x);
+		fprintf(stdout, "%d %d\n", initial->definitive_y,
+			initial->definitive_x);
 		fflush(stdout);
 	}
 	if (piece != NULL)

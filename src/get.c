@@ -1,6 +1,5 @@
 #include "filler.h"
 
-
 void read_the_map_loop_set(t_init *initial, int j, int i, int *catch)
 {
 	initial->opp_x_curr = j;

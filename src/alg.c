@@ -1,6 +1,5 @@
 #include "filler.h"
 
-
 void placement_alg_density(t_init *initial, int *points)
 {
 	int avg_x;
