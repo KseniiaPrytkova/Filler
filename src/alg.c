@@ -26,13 +26,40 @@ void placement_alg_density(t_init *initial, int *points)
 		*points -= initial->temp_y_2 * GRAV_FACTOR_Y;
 }
 
+int placement_alg_heatmap_handle(t_init *initial, int n, char board[][n],
+	int *nm_player, int *points)
+{
+	// Player
+	if (board[initial->temp_x_2+initial->temp_y_5]
+		     [initial->temp_y_2+initial->temp_x_5] == -99)
+	{
+		(*nm_player) += 1;
+		if ((*nm_player) > 1)
+			return (0);
+	}
+	// Enemy
+	else if (board[initial->temp_x_2+initial->temp_y_5]
+		          [initial->temp_y_2+initial->temp_x_5] == 99)
+		return (0);
+	else
+		(*points) += board[initial->temp_x_2+initial->temp_y_5]
+	                      [initial->temp_y_2+initial->temp_x_5];
+	return (1);
+}
+
+int check_nm_player(int nm_player, int points)
+{
+	if (nm_player != 1)
+		return POINTS_INF;
+	return points;
+}
+
 int placement_alg_heatmap(t_init *initial, char **piece, int n,
 	char board[][n], int points)
 {
 	int i;
 	int j;
 	int nm_player;
-
 	nm_player = 0;
 	i = -1;
 	while (++i < initial->y_piece)
@@ -42,24 +69,15 @@ int placement_alg_heatmap(t_init *initial, char **piece, int n,
 		{
 			if (piece[i][j] == '*')
 			{
-				// Player
-				if (board[initial->temp_x_2+j][initial->temp_y_2+i] == -99)
-				{
-					if (++nm_player > 1)
-						return POINTS_INF;
-					continue;
-				}
-				// Enemy
-				else if (board[initial->temp_x_2+j][initial->temp_y_2+i] == 99)
+				initial->temp_x_5 = i;
+				initial->temp_y_5 = j;
+				if (!placement_alg_heatmap_handle(initial, n, board,
+					&nm_player, &points))
 					return POINTS_INF;
-				else
-					points += board[initial->temp_x_2+j][initial->temp_y_2+i];
 			}
 		}
 	}
-	if (nm_player != 1)
-		return POINTS_INF;
-	return points;
+	return check_nm_player(nm_player, points);
 }
 
 int placement_alg(t_init *initial, char **piece, int n,
