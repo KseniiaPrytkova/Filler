@@ -1,5 +1,6 @@
 #include "filler.h"
 
+
 void get_player_nb(t_init *initial)
 {
 	char *str;
@@ -53,9 +54,6 @@ void get_arr_dim(t_init *initial)
 	int ret;
 	char *str;
 
-	// initial->x_plateau = 0;
-	// initial->y_plateau = 0;
-
 	if (!(ret = get_next_line_fl(0, &str)))
 	{
 		perror("Error with reading the line [2] (gnl): ");
@@ -63,8 +61,6 @@ void get_arr_dim(t_init *initial)
 
 	str += 8;
 	dim_reader(str, &initial->x_plateau, &initial->y_plateau);
-	// ft_strdel(&str);
-	//free(str);
 }
 
 int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
@@ -77,21 +73,17 @@ int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 	i = 0;
 	j = 0;
 	catch = 0;
-	/* skip 2 lines before field */
+
 		get_next_line_fl(0, &str);
-		fprintf(fptr, "read_the_map: str: \"%s\"\n", str);
-		fflush(fptr);
 		if (str == NULL)
 		{
 			// a null string from the filter vm
 			// ends the game.
-			fprintf(fptr, "#### ERROR: str is null -> quit\n");
-			fflush(fptr);
 			return (0);
 		}
 		else if (str[0] == 'P' && str[1] == 'l')
 		{
-			// Ugly hack. If line is "Plateau ..." here.
+			// If line is "Plateau ..." here.
 			ft_strdel(&str);
 			get_next_line_fl(0, &str);
 		}
@@ -101,8 +93,6 @@ int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 		}
 		else
 		{
-			fprintf(fptr, "#### ERROR: unknown str: \"%s\"\n", str);
-			fflush(fptr);
 			return (0);
 		}
 		ft_strdel(&str);
@@ -128,22 +118,7 @@ int read_the_map(t_init *initial, int n, char board[][n], FILE *fptr)
 			ft_strdel(&str);
 			i++;
 		}
-/* print arr */
-	fprintf(fptr, "I WILL PRINT YOUR ARRAY\n");
-	i = 0;
-	while (i < initial->y_plateau)
-	{
-		j = 0;
-		while (j < initial->x_plateau)
-			{
-				fprintf(fptr, "%c", board[j][i]);
-				j++;
-			}
-			fprintf(fptr, "\n");
-		i++;
-	}
-	fprintf(fptr, "curr OPP COORD: Ycurr = %d Xcurr = %d\n", initial->opp_y_curr, initial->opp_x_curr);
-/* --------- */
+
 	return (1);
 }
 
@@ -155,13 +130,9 @@ void read_the_piece(t_init **initial, char ***piece, FILE *fptr)
 
 	// Read piece dimensions.
 	get_next_line_fl(0, &str);
-	fprintf(fptr, "----> %s\n", str);
-	fflush(fptr);
 	(*initial)->y_piece = ft_atoi(ft_strsplit(str, ' ')[1]);
 	(*initial)->x_piece = ft_atoi(ft_strsplit(str, ' ')[2]);
 	ft_strdel(&str);
-	fprintf(fptr, "piece y=%d, x=%d\n", (*initial)->y_piece, (*initial)->x_piece);
-	fflush(fptr);
 
 	*piece = (char**)malloc((*initial)->y_piece * sizeof(char*));
 	i = -1;
@@ -180,51 +151,4 @@ void read_the_piece(t_init **initial, char ***piece, FILE *fptr)
 		}
 		ft_strdel(&str);
 	}
-	// /* print arr */
-	fprintf(fptr, "I WILL PRINT YOUR PIECE\n");
-	fflush(fptr);
-	i = 0;
-	while (i < (*initial)->y_piece)
-	{
-		j = 0;
-		while (j < (*initial)->x_piece)
-			{
-				fprintf(fptr, "%c", (*piece)[i][j]);
-				fflush(fptr);
-				j++;
-			}
-			fprintf(fptr, "\n");
-			fflush(fptr);
-		i++;
-	}
-/* --------- */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
