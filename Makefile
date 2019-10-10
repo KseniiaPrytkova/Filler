@@ -5,6 +5,8 @@ SRC_PROJECT = src/filler.c \
             	src/init_part.c \
 				src/create_hot_map.c \
 				src/make_decision_part.c \
+				src/piece_calc.c \
+				src/alg.c \
 
 #OBJECT_PROJECT = $(SRC_PROJECT:.c=.o)
 FLAGS = -O3 -Wall -Wextra -Werror -Iinclude/ -Ilibft/ -Llibft/ -lft

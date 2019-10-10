@@ -64,12 +64,7 @@ int main(void)
 		}
 		read_the_piece(&initial, &piece);
 		create_hot_board(initial, initial->y_plateau, board);
-		if (!piece_get_placement(initial, piece, initial->y_plateau, board))
-		{
-			fprintf(stdout, "0 0\n");
-			fflush(stdout);
-			break;
-		}
+		piece_get_placement(initial, piece, initial->y_plateau, board);
 
 		// Print coordinates to stdout for the filler VM.
 		fprintf(stdout, "%d %d\n", initial->definitive_y, initial->definitive_x);
@@ -78,6 +73,5 @@ int main(void)
 	if (piece != NULL)
 		piece_cleaner(initial, piece);
 	free(initial);
-	// system("leaks -quiet test_gnl");
 	return (0);
 }

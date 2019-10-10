@@ -16,7 +16,6 @@
 
 # define GRAV_FACTOR_X 2
 # define GRAV_FACTOR_Y 2
-# define ENEMY_POS_FACTOR 2
 
 void perror(char const * s);
 typedef struct	s_init
@@ -48,6 +47,10 @@ typedef struct	s_init
 
 	int temp_x;
 	int temp_y;
+	int temp_x_2;
+	int temp_y_2;
+	int temp_x_3;
+	int temp_y_3;
 
 	// Hotmap: store the distribution of player points.
 	int player_points_nm;
@@ -60,6 +63,8 @@ void get_arr_dim(t_init *initial);
 int read_the_map(t_init *initial, int n, char board[][n]);
 void read_the_piece(t_init **initial, char ***piece);
 void create_hot_board(t_init *initial, int n, char board[][n]);
-int piece_get_placement(t_init *initial, char **piece, int n, char board[][n]);
+void piece_get_placement(t_init *initial, char **piece, int n, char board[][n]);
+int piece_calc_points(t_init *initial, char **piece, int n, char board[][n]);
+int placement_alg(t_init *initial, char **piece, int n, char board[][n]);
 
 #endif
