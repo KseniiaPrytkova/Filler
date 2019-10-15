@@ -1,4 +1,6 @@
 from subprocess import Popen, PIPE
+import sys
+sys.path.append("/Users/kprytkov/pygame")
 # $ pip install pygame
 import pygame
 import sys
@@ -10,15 +12,15 @@ __FILLER_VM = "./resources/filler_vm"
 
 COLOR_BKG = (255, 255, 255)
 
-COLOR_PLAYER =            (66, 135, 245)
-COLOR_PLAYER_BORDER =     (17, 36, 66)
-COLOR_PLAYER_NEW =        (89, 147, 245)
-COLOR_PLAYER_NEW_BORDER = (176, 203, 245)
+COLOR_PLAYER =				(66, 135, 245)
+COLOR_PLAYER_BORDER =		(17, 36, 66)
+COLOR_PLAYER_NEW =			(89, 147, 245)
+COLOR_PLAYER_NEW_BORDER =	(176, 203, 245)
 
-COLOR_ENEMY =             (240, 99, 38)
-COLOR_ENEMY_BORDER =      (94, 38, 14)
-COLOR_ENEMY_NEW =         (237, 116, 64)
-COLOR_ENEMY_NEW_BORDER =  (227, 158, 145)
+COLOR_ENEMY = 				(240, 99, 38)
+COLOR_ENEMY_BORDER =		(94, 38, 14)
+COLOR_ENEMY_NEW =			(237, 116, 64)
+COLOR_ENEMY_NEW_BORDER =	(227, 158, 145)
 
 BORDER_WIDTH = 3
 

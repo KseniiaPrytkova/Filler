@@ -1,26 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/14 18:49:58 by kprytkov          #+#    #+#             */
+/*   Updated: 2019/10/15 20:47:34 by kprytkov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "filler.h"
 
-void read_the_map_loop_set(t_init *initial, int j, int i, int *catch)
+void	read_the_map_loop_set(t_init *initial, int j, int i, int *catch)
 {
 	initial->opp_x_curr = j;
 	initial->opp_y_curr = i;
 	*catch = 1;
 }
 
-void read_the_map_loop(t_init *initial, int n, char board[][n])
+void	read_the_map_loop(t_init *initial, int n, char board[][n])
 {
-	int i;
-	int j;
-	int catch;
-    char *str;
+	int		i;
+	int		j;
+	int		catch;
+	char	*str;
+	char	*line;
 
 	i = -1;
 	catch = 0;
 	str = NULL;
+	line = NULL;
 	while (++i < initial->y_plateau)
 	{
 		get_next_line_fl(0, &str);
-		char *line = ft_strsplit(str, ' ')[1];
+		line = ft_strsplit(str, ' ')[1];
 		j = -1;
 		while (++j < initial->x_plateau)
 		{
@@ -33,9 +47,9 @@ void read_the_map_loop(t_init *initial, int n, char board[][n])
 	}
 }
 
-int read_the_map(t_init *initial, int n, char board[][n])
+int		read_the_map(t_init *initial, int n, char board[][n])
 {
-	char *str;
+	char	*str;
 
 	str = NULL;
 	get_next_line_fl(0, &str);
@@ -43,7 +57,7 @@ int read_the_map(t_init *initial, int n, char board[][n])
 		return (0);
 	else if (str[0] == 'P' && str[1] == 'l')
 	{
-		// If line is "Plateau ..." here.
+/* If line is "Plateau ..." here. */
 		ft_strdel(&str);
 		get_next_line_fl(0, &str);
 	}
@@ -54,11 +68,11 @@ int read_the_map(t_init *initial, int n, char board[][n])
 	return (1);
 }
 
-void read_the_piece_alloc(t_init **initial, char ***piece)
+void	read_the_piece_alloc(t_init **initial, char ***piece)
 {
-	int i;
-	int j;
-	char *str;
+	int		i;
+	int		j;
+	char	*str;
 
 	str = NULL;
 	*piece = (char**)malloc((*initial)->y_piece * sizeof(char*));
@@ -80,16 +94,15 @@ void read_the_piece_alloc(t_init **initial, char ***piece)
 	}
 }
 
-void read_the_piece(t_init **initial, char ***piece)
+void	read_the_piece(t_init **initial, char ***piece)
 {
-	char *str;
+	char	*str;
 
 	str = NULL;
-	// Read piece dimensions.
+/* Read piece dimensions. */
 	get_next_line_fl(0, &str);
 	(*initial)->y_piece = ft_atoi(ft_strsplit(str, ' ')[1]);
 	(*initial)->x_piece = ft_atoi(ft_strsplit(str, ' ')[2]);
 	ft_strdel(&str);
-
 	read_the_piece_alloc(initial, piece);
 }

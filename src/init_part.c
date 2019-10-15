@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_part.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/14 18:49:58 by kprytkov          #+#    #+#             */
+/*   Updated: 2019/10/15 21:15:38 by kprytkov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "filler.h"
 
-void get_player_nb(t_init *initial)
+void		get_player_nb(t_init *initial)
 {
-	char *str;
-	char figure;
-	int ret;
+	char	*str;
+	char	figure;
+	int		ret;
 
 	if (!(ret = get_next_line_fl(0, &str)))
 	{
@@ -23,10 +35,10 @@ void get_player_nb(t_init *initial)
 	ft_strdel(&str);
 }
 
-static void dim_reader(char *str, int *x, int *y)
+static void	dim_reader(char *str, int *x, int *y)
 {
-	int i;
-	char buff[MAX_INT_LEN];
+	int		i;
+	char	buff[MAX_INT_LEN];
 
 	while (str)
 	{
@@ -48,10 +60,10 @@ static void dim_reader(char *str, int *x, int *y)
 	}
 }
 
-void get_arr_dim(t_init *initial)
+void		get_arr_dim(t_init *initial)
 {
-	int ret;
-	char *str;
+	int		ret;
+	char	*str;
 
 	if (!(ret = get_next_line_fl(0, &str)))
 	{

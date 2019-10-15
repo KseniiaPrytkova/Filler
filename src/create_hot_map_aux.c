@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   create_hot_map_aux.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/10/14 18:49:58 by kprytkov          #+#    #+#             */
+/*   Updated: 2019/10/15 20:37:03 by kprytkov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "filler.h"
 
 void take_care_of_yourself_not_first_iter(t_init *initial, int delta_x,
@@ -18,10 +30,10 @@ void take_care_of_yourself_not_first_iter(t_init *initial, int delta_x,
 
 void take_care_of_yourself(t_init *initial, int i, int j)
 {
-	int delta_x;
-	int delta_y;
-	int prelim_delta_x;
-	int prelim_delta_y;
+	int	delta_x;
+	int	delta_y;
+	int	prelim_delta_x;
+	int	prelim_delta_y;
 	
 	delta_x = 0;
 	delta_y = 0;
