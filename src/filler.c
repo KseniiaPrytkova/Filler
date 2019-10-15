@@ -35,41 +35,53 @@ void piece_cleaner(t_init *initial, char **piece)
 	free(piece);
 }
 
-int main(void)
+int init(t_init **initial)
 {
-	t_init *initial = NULL;
-	char **piece = NULL;
-
-	if (!(initial = (t_init *)malloc(sizeof(t_init))))
+	if (!((*initial) = (t_init *)malloc(sizeof(t_init))))
 	{
 		perror("Error: ");
 		return (0);
 	}
+	init_structure(*initial);
+	get_player_nb(*initial);
+	if ((*initial)->figure == 'o')
+		(*initial)->enemy_figure = 'x';
+	else if ((*initial)->figure == 'x')
+		(*initial)->enemy_figure = 'o';
+	get_arr_dim(*initial);
+	return (1);
+}
 
-	init_structure(initial);
+int run_game(t_init *initial, int n, char board[][n], char **piece)
+{
+    if (!read_the_map(initial, n, board))
+        return (0);
+    read_the_piece(&initial, &piece);
+    create_hot_board(initial, n, board);
+    piece_get_placement(initial, piece, n, board);
 
-	get_player_nb(initial);
-	if (initial->figure == 'o')
-		initial->enemy_figure = 'x';
-	else if (initial->figure == 'x')
-		initial->enemy_figure = 'o';
-	get_arr_dim(initial);
+    fprintf(stdout, "%d %d\n", initial->definitive_y,
+            initial->definitive_x);
+    fflush(stdout);
+    return (1);
+}
 
+int main(void)
+{
+	t_init *initial;
+	char **piece;
+
+    initial = NULL;
+    piece = NULL;
+    if (!init(&initial))
+    {
+        return (1);
+    }
 	char board[initial->x_plateau][initial->y_plateau];
 	while (1)
 	{
-		if (!read_the_map(initial, initial->y_plateau, board))
-		{
-			break;
-		}
-		read_the_piece(&initial, &piece);
-		create_hot_board(initial, initial->y_plateau, board);
-		piece_get_placement(initial, piece, initial->y_plateau, board);
-
-		// Print coordinates to stdout for the filler VM.
-		fprintf(stdout, "%d %d\n", initial->definitive_y,
-			initial->definitive_x);
-		fflush(stdout);
+	    if (!run_game(initial, initial->y_plateau, board, piece))
+	        break;
 	}
 	if (piece != NULL)
 		piece_cleaner(initial, piece);

@@ -9,6 +9,8 @@ SRC_PROJECT = src/filler.c \
 				src/alg.c \
 				src/get.c \
 				src/count_delta.c \
+				src/hot_map_catch_next.c \
+				src/create_hot_map_aux.c \
 
 #OBJECT_PROJECT = $(SRC_PROJECT:.c=.o)
 FLAGS = -O3 -Wall -Wextra -Werror -Iinclude/ -Ilibft/ -Llibft/ -lft

@@ -72,5 +72,7 @@ int piece_calc_points(t_init *initial, char **piece, int n, char board[][n]);
 int placement_alg(t_init *initial, char **piece, int n, char board[][n]);
 int count_delta_x(t_init *initial, int delta_x, int j);
 int count_delta_y(t_init *initial, int delta_y, int i);
+void catch_next(t_init *initial, int i, int j, int n, char board[][n]);
+void take_care_of_yourself(t_init *initial, int i, int j);
 
 #endif
