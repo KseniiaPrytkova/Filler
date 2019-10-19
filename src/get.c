@@ -19,7 +19,7 @@ void	read_the_map_loop_set(t_init *initial, int j, int i, int *catch)
 	*catch = 1;
 }
 
-void	read_the_map_loop(t_init *initial, int n, char board[][n])
+void	read_the_map_loop(t_init *initial)
 {
 	int		i;
 	int		j;
@@ -38,16 +38,16 @@ void	read_the_map_loop(t_init *initial, int n, char board[][n])
 		j = -1;
 		while (++j < initial->x_plateau)
 		{
-			board[j][i] = line[j];
-			if (((board[j][i] == initial->enemy_figure) ||
-				(board[j][i] == initial->enemy_figure - 32)) && !catch)
+			initial->board[j][i] = line[j];
+			if (((initial->board[j][i] == initial->enemy_figure) ||
+				(initial->board[j][i] == initial->enemy_figure - 32)) && !catch)
 				read_the_map_loop_set(initial, j, i, &catch);
 		}
 		ft_strdel(&str);
 	}
 }
 
-int		read_the_map(t_init *initial, int n, char board[][n])
+int		read_the_map(t_init *initial)
 {
 	char	*str;
 
@@ -64,7 +64,7 @@ int		read_the_map(t_init *initial, int n, char board[][n])
 	else if (str[0] != ' ' && str[1] != ' ' && str[2] != ' ')
 		return (0);
 	ft_strdel(&str);
-	read_the_map_loop(initial, n, board);
+	read_the_map_loop(initial);
 	return (1);
 }
 

@@ -45,8 +45,7 @@ static void	dim_reader(char *str, int *x, int *y)
 		i = 0;
 		while (str && *str != ' ' && *str != ':')
 		{
-			buff[i] = *str;
-			i++;
+			buff[i++] = *str;
 			str++;
 		}
 		buff[i] = '\0';
@@ -55,7 +54,7 @@ static void	dim_reader(char *str, int *x, int *y)
 		else
 			*x = ft_atoi(buff);
 		if (!str || *str == ':')
-			break;
+			break ;
 		str++;
 	}
 }
@@ -69,7 +68,6 @@ void		get_arr_dim(t_init *initial)
 	{
 		perror("Error with reading the line [2] (gnl): ");
 	}
-
 	str += 8;
 	dim_reader(str, &initial->x_plateau, &initial->y_plateau);
 }

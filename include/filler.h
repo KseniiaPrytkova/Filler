@@ -63,6 +63,8 @@ typedef struct		s_init
 	int				temp_y_4;
 	int				temp_x_5;
 	int				temp_y_5;
+	int				points;
+	char			**board;
 	/* Hotmap: store the distribution of player points. */
 	int				player_points_nm;
 	int				player_points_x;
@@ -71,15 +73,17 @@ typedef struct		s_init
 
 void				get_player_nb(t_init *initial);
 void				get_arr_dim(t_init *initial);
-int					read_the_map(t_init *initial, int n, char board[][n]);
+int					read_the_map(t_init *initial);
 void				read_the_piece(t_init **initial, char ***piece);
-void				create_hot_board(t_init *initial, int n, char board[][n]);
-void				piece_get_placement(t_init *initial, char **piece, int n, char board[][n]);
-int					piece_calc_points(t_init *initial, char **piece, int n, char board[][n]);
-int					placement_alg(t_init *initial, char **piece, int n, char board[][n]);
+void				create_hot_board(t_init *initial);
+void				piece_get_placement(t_init *initial, char **piece);
+int					piece_calc_points(t_init *initial, char **piece);
+int					placement_alg(t_init *initial, char **piece);
 int					count_delta_x(t_init *initial, int delta_x, int j);
 int					count_delta_y(t_init *initial, int delta_y, int i);
-void				catch_next(t_init *initial, int i, int j, int n, char board[][n]);
+void				catch_next(t_init *initial, int i, int j);
 void				take_care_of_yourself(t_init *initial, int i, int j);
+void				piece_cleaner(t_init *initial, char **piece);
+void				board_cleaner(t_init *initial);
 
 #endif

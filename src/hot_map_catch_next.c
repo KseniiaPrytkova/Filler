@@ -12,10 +12,10 @@
 
 #include "filler.h"
 
-int		catch_next_handle(t_init *initial, int n, char board[][n], int i, int *j)
+int		catch_next_handle(t_init *initial, int i, int *j)
 {
-	if ((board[*j][i] == initial->enemy_figure) ||
-		(board[*j][i] == initial->enemy_figure - 32))
+	if ((initial->board[*j][i] == initial->enemy_figure) ||
+		(initial->board[*j][i] == initial->enemy_figure - 32))
 	{
 		initial->opp_x_next = *j;
 		initial->opp_y_next = i;
@@ -34,7 +34,7 @@ void	catch_next_final(t_init *initial)
 		initial->is_one_piece = TRUE;
 }
 
-void	catch_next(t_init *initial, int i, int j, int n, char board[][n])
+void	catch_next(t_init *initial, int i, int j)
 {
 	int	temp_i;
 	int	temp_j;
@@ -46,12 +46,11 @@ void	catch_next(t_init *initial, int i, int j, int n, char board[][n])
 	initial->is_one_piece = FALSE;
 	while (temp_i < initial->y_plateau)
 	{
-		if (first)
-			temp_j = 0;
+		temp_j = 0 ? first : temp_j;
 		while (temp_j < initial->x_plateau)
 		{
 			first = 1;
-			if (!catch_next_handle(initial, n, board, temp_i, &temp_j))
+			if (!catch_next_handle(initial, temp_i, &temp_j))
 				break ;
 		}
 		if (initial->is_one_piece == -1)

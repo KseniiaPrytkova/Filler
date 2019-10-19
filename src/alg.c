@@ -36,11 +36,11 @@ void	placement_alg_density(t_init *initial, int *points)
 		*points -= initial->temp_y_2 * GRAV_FACTOR_Y;
 }
 
-int		placement_alg_heatmap_handle(t_init *initial, int n, char board[][n],
-	int *nm_player, int *points)
+int		placement_alg_heatmap_handle(t_init *initial, int *nm_player,
+		int *points)
 {
 	/* Player */
-	if (board[initial->temp_x_2 + initial->temp_y_5]
+	if (initial->board[initial->temp_x_2 + initial->temp_y_5]
 		[initial->temp_y_2 + initial->temp_x_5] == -99)
 	{
 		(*nm_player) += 1;
@@ -48,11 +48,11 @@ int		placement_alg_heatmap_handle(t_init *initial, int n, char board[][n],
 			return (0);
 	}
 	/* Enemy */
-	else if (board[initial->temp_x_2 + initial->temp_y_5]
+	else if (initial->board[initial->temp_x_2 + initial->temp_y_5]
 		[initial->temp_y_2 + initial->temp_x_5] == 99)
 		return (0);
 	else
-		(*points) += board[initial->temp_x_2 + initial->temp_y_5]
+		(*points) += initial->board[initial->temp_x_2 + initial->temp_y_5]
 		[initial->temp_y_2 + initial->temp_x_5];
 	return (1);
 }
@@ -64,8 +64,7 @@ int		check_nm_player(int nm_player, int points)
 	return (points);
 }
 
-int		placement_alg_heatmap(t_init *initial, char **piece, int n,
-	char board[][n], int points)
+int		placement_alg_heatmap(t_init *initial, char **piece, int points)
 {
 	int	i;
 	int	j;
@@ -82,8 +81,8 @@ int		placement_alg_heatmap(t_init *initial, char **piece, int n,
 			{
 				initial->temp_x_5 = i;
 				initial->temp_y_5 = j;
-				if (!placement_alg_heatmap_handle(initial, n, board,
-					&nm_player, &points))
+				if (!placement_alg_heatmap_handle(initial, &nm_player,
+							&points))
 					return (POINTS_INF);
 			}
 		}
@@ -91,8 +90,7 @@ int		placement_alg_heatmap(t_init *initial, char **piece, int n,
 	return (check_nm_player(nm_player, points));
 }
 
-int		placement_alg(t_init *initial, char **piece, int n,
-	char board[][n])
+int		placement_alg(t_init *initial, char **piece)
 {
 	int	points;
 
@@ -102,6 +100,6 @@ int		placement_alg(t_init *initial, char **piece, int n,
 		return (POINTS_INF);
 	points = 0;
 	placement_alg_density(initial, &points);
-	points = placement_alg_heatmap(initial, piece, n, board, points);
+	points = placement_alg_heatmap(initial, piece, points);
 	return (points);
 }

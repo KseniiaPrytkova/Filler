@@ -6,7 +6,7 @@
 /*   By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 18:49:58 by kprytkov          #+#    #+#             */
-/*   Updated: 2019/10/15 21:17:59 by kprytkov         ###   ########.fr       */
+/*   Updated: 2019/10/19 21:05:57 by kprytkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,11 @@ static void	init_structure(t_init *initial)
 	initial->is_first_iteration = TRUE;
 }
 
-void		piece_cleaner(t_init *initial, char **piece)
-{
-	int	i;
-
-	i = 0;
-	while (i < initial->y_piece && piece[i])
-	{
-		free(piece[i]);
-		i++;
-	}
-	free(piece);
-}
-
 int			init(t_init **initial)
 {
+	int i;
+
+	i = 0;
 	if (!((*initial) = (t_init *)malloc(sizeof(t_init))))
 	{
 		perror("Error: bad malloc (structure)");
@@ -56,16 +46,27 @@ int			init(t_init **initial)
 	else if ((*initial)->figure == 'x')
 		(*initial)->enemy_figure = 'o';
 	get_arr_dim(*initial);
+	(*initial)->board = NULL;
+	(*initial)->board = (char**)malloc((*initial)->x_plateau * sizeof(char*));
+	i = -1;
+	while (++i < (*initial)->x_plateau)
+	{
+		(*initial)->board[i] = (char*)malloc(
+				(*initial)->y_plateau * sizeof(char));
+	}
 	return (1);
 }
 
-int			run_game(t_init *initial, int n, char board[][n], char **piece)
+int			run_game(t_init *initial, char **piece)
 {
-	if (!read_the_map(initial, n, board))
+	if (!read_the_map(initial))
 		return (0);
 	read_the_piece(&initial, &piece);
-	create_hot_board(initial, n, board);
-	piece_get_placement(initial, piece, n, board);
+	create_hot_board(initial);
+	piece_get_placement(initial, piece);
+	/* print the coordinates to filler_vm */
+	fprintf(stdout, "%d %d\n", initial->definitive_y, initial->definitive_x);
+	fflush(stdout);
 	return (1);
 }
 
@@ -73,7 +74,6 @@ int			main(void)
 {
 	t_init	*initial;
 	char	**piece;
-	char	board[initial->x_plateau][initial->y_plateau];
 
 	initial = NULL;
 	piece = NULL;
@@ -83,11 +83,12 @@ int			main(void)
 	}
 	while (1)
 	{
-		if (!run_game(initial, initial->y_plateau, board, piece))
+		if (!run_game(initial, piece))
 			break ;
 	}
 	if (piece != NULL)
 		piece_cleaner(initial, piece);
+	board_cleaner(initial);
 	free(initial);
 	return (0);
 }

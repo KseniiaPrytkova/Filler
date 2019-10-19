@@ -6,18 +6,18 @@
 /*   By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 18:49:58 by kprytkov          #+#    #+#             */
-/*   Updated: 2019/10/15 21:15:57 by kprytkov         ###   ########.fr       */
+/*   Updated: 2019/10/19 21:03:22 by kprytkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
 
-void	piece_get_placement_handle(t_init *initial, char **piece, int n,
-	char board[][n], int *points_best)
+void	piece_get_placement_handle(t_init *initial, char **piece,
+		int *points_best)
 {
 	int	points_new;
 
-	points_new = piece_calc_points(initial, piece, n, board);
+	points_new = piece_calc_points(initial, piece);
 	if (points_new < (*points_best))
 	{
 		*points_best = points_new;
@@ -26,7 +26,7 @@ void	piece_get_placement_handle(t_init *initial, char **piece, int n,
 	}
 }
 
-void	piece_get_placement(t_init *initial, char **piece, int n, char board[][n])
+void	piece_get_placement(t_init *initial, char **piece)
 {
 	int	i;
 	int	j;
@@ -41,12 +41,12 @@ void	piece_get_placement(t_init *initial, char **piece, int n, char board[][n])
 		j = -1;
 		while (++j < initial->x_plateau)
 		{
-			if (board[j][i] == -99) // Player point
+			/* Player point */
+			if (initial->board[j][i] == -99)
 			{
 				initial->temp_x = j;
 				initial->temp_y = i;
-				piece_get_placement_handle(initial, piece, n, board,
-					&points_best);
+				piece_get_placement_handle(initial, piece, &points_best);
 			}
 		}
 	}

@@ -6,15 +6,14 @@
 #    By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/14 18:49:58 by kprytkov          #+#    #+#              #
-#    Updated: 2019/10/15 21:21:28 by kprytkov         ###   ########.fr        #
+#    Updated: 2019/10/19 22:46:13 by kprytkov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = kprytkov.filler
 LIB_NAME = ./libft/libft.a
-
-SRC_PROJECT = src/filler.c \
-            	src/init_part.c \
+SRC_PROJECT =	src/filler.c \
+				src/init_part.c \
 				src/create_hot_map.c \
 				src/make_decision_part.c \
 				src/piece_calc.c \
@@ -23,10 +22,9 @@ SRC_PROJECT = src/filler.c \
 				src/count_delta.c \
 				src/hot_map_catch_next.c \
 				src/create_hot_map_aux.c \
-
+				src/free.c \
 #OBJECT_PROJECT = $(SRC_PROJECT:.c=.o)
 FLAGS = -O3 -Wall -Wextra -Werror -Iinclude/ -Ilibft/ -Llibft/ -lft
-
 
 all: $(NAME)
 	@echo '🦄 compiling a project "filler" for you Mac'

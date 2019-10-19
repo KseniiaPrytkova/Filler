@@ -12,12 +12,12 @@
 
 #include "filler.h"
 
-void	piece_calc_points_handle(t_init *initial, char **piece, int n,
-	char board[][n], int *points_best)
+void	piece_calc_points_handle(t_init *initial, char **piece,
+		int *points_best)
 {
 	int	points_new;
 
-	points_new = placement_alg(initial, piece, n, board);
+	points_new = placement_alg(initial, piece);
 	if (points_new < (*points_best))
 	{
 		*points_best = points_new;
@@ -26,7 +26,7 @@ void	piece_calc_points_handle(t_init *initial, char **piece, int n,
 	}
 }
 
-int		piece_calc_points(t_init *initial, char **piece, int n, char board[][n])
+int		piece_calc_points(t_init *initial, char **piece)
 {
 	int	x;
 	int	y;
@@ -45,7 +45,7 @@ int		piece_calc_points(t_init *initial, char **piece, int n, char board[][n])
 				continue;
 			initial->temp_x_2 = x;
 			initial->temp_y_2 = y;
-			piece_calc_points_handle(initial, piece, n, board, &points_best);
+			piece_calc_points_handle(initial, piece, &points_best);
 		}
 	}
 	initial->temp_x = initial->temp_x_3;
