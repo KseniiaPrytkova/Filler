@@ -3,26 +3,83 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kprytkov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/22 16:48:29 by kprytkov          #+#    #+#             */
-/*   Updated: 2017/11/22 16:48:30 by kprytkov         ###   ########.fr       */
+/*   Created: 2018/10/21 04:32:02 by kprytkov          #+#    #+#             */
+/*   Updated: 2019/10/20 19:24:23 by kprytkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LIBFT_H
-# define FT_LIBFT_H
+#ifndef LIBFT_H
+# define LIBFT_H
+
+# include <stdarg.h>
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <stdio.h>
 # include <ctype.h>
 # include <limits.h>
+# define MAXNSIZE		(sizeof(size_t) * 8)
+# define BUFFER_SIZE	2048
+# define SP				' '
+# define HS				'#'
+# define PL				'+'
+# define MN				'-'
 
 # define BUFF_SIZE 17
 # define MAX_FILES 4864
 
-int					get_next_line_fl(const int fd, char **line);
+typedef struct		s_flags
+{
+	size_t			zero : 1;
+	size_t			space : 1;
+	size_t			hash : 1;
+	size_t			plus : 1;
+	size_t			minus : 1;
+	size_t			l : 1;
+	size_t			ll : 1;
+	size_t			h : 1;
+	size_t			hh : 1;
+	size_t			j : 1;
+	size_t			z : 1;
+	size_t			is_bigx : 1;
+	size_t			is_neg : 1;
+	size_t			is_precision : 1;
+	size_t			is_width : 1;
+	size_t			precision;
+	size_t			width;
+
+}					t_flags;
+
+typedef struct		s_printf
+{
+	va_list			ap;
+	t_flags			fl;
+	char			conv_char;
+	int				i;
+	char			*buf;
+	int				to_out;
+	int				outfd;
+
+}					t_printf;
+
+void				add_ch_tobuf(const int c, t_printf *p);
+size_t				parse_conv_string(const char *s, size_t i, t_printf *p);
+size_t				fill_flags(const char *s, size_t i, t_printf *p);
+void				get_arg(const char conv, t_printf *p);
+char				count_onebits(const int c);
+void				print_bit(size_t b);
+unsigned char		count_act_bytes(const int c);
+size_t				get_unsigned_arg(t_printf *p);
+size_t				get_signed_arg(t_printf *p);
+
+void				format_print_integer(const size_t d, t_printf *p);
+void				format_print_char(const int c, t_printf *p);
+void				format_print_string(const char *s, t_printf *p);
+void				format_print_unistring(const wchar_t *s, t_printf *p);
+
+int					ft_printf(const char *convstr, ...);
+int					ft_dprintf(int fd, const char *convstr, ...);
 
 typedef struct		s_list
 {
@@ -30,6 +87,7 @@ typedef struct		s_list
 	size_t			content_size;
 	struct s_list	*next;
 }					t_list;
+
 void				ft_putchar(char c);
 void				ft_putstr(char const *s);
 void				*ft_memset(void *b, int c, size_t len);
@@ -94,5 +152,6 @@ void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstnew(void const *content, size_t content_size);
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
+int					get_next_line_fl(const int fd, char **line);
 
 #endif

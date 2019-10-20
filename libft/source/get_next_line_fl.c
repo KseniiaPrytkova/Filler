@@ -6,13 +6,13 @@
 /*   By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/25 23:25:12 by kprytkov          #+#    #+#             */
-/*   Updated: 2019/10/19 22:42:00 by kprytkov         ###   ########.fr       */
+/*   Updated: 2019/10/20 19:39:15 by kprytkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char			*join_me(char *s1, char const *s2)
+static char			*join_me(char *s1, char const *s2)
 {
 	size_t	s1_len;
 	size_t	s2_len;
@@ -38,7 +38,7 @@ char			*join_me(char *s1, char const *s2)
 	return (result_string);
 }
 
-static char		*string_sub(char *s, unsigned int start, size_t len)
+static char			*string_sub(char *s, unsigned int start, size_t len)
 {
 	char	*substring;
 	size_t	string_len;
@@ -65,7 +65,7 @@ static char		*string_sub(char *s, unsigned int start, size_t len)
 	return (substring);
 }
 
-void			set_line(char **result_string, char **line)
+static void			set_line(char **result_string, char **line)
 {
 	int str_len;
 	int counter;
@@ -83,7 +83,7 @@ void			set_line(char **result_string, char **line)
 		(str_len - counter));
 }
 
-int				get_next_line_fl(const int fd, char **line)
+int					get_next_line_fl(const int fd, char **line)
 {
 	static char *result_string;
 	char		buffer[BUFF_SIZE + 1];

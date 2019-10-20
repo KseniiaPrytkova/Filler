@@ -6,13 +6,11 @@
 /*   By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 18:49:58 by kprytkov          #+#    #+#             */
-/*   Updated: 2019/10/19 21:05:57 by kprytkov         ###   ########.fr       */
+/*   Updated: 2019/10/19 22:57:03 by kprytkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "filler.h"
-#include <stdint.h>
-#include <inttypes.h>
 
 static void	init_structure(t_init *initial)
 {

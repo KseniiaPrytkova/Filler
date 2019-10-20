@@ -14,8 +14,8 @@
 
 static int		how_many_digits(int n)
 {
-	int		counter;
-	long	positive_n;
+	int			counter;
+	long		positive_n;
 
 	counter = 0;
 	positive_n = (long)n;
@@ -47,10 +47,10 @@ static void		convert_positive(char *string, long positive_n)
 
 char			*ft_itoa(int n)
 {
-	char	*final_storage;
-	char	*result;
-	int		digits_nb;
-	long	positive_n;
+	char		*final_storage;
+	char		*result;
+	int			digits_nb;
+	long		positive_n;
 
 	digits_nb = how_many_digits(n);
 	final_storage = malloc(sizeof(char) * digits_nb + 1);

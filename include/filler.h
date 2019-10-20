@@ -6,7 +6,7 @@
 /*   By: kprytkov <kprytkov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 18:49:58 by kprytkov          #+#    #+#             */
-/*   Updated: 2019/10/15 21:29:16 by kprytkov         ###   ########.fr       */
+/*   Updated: 2019/10/20 19:46:44 by kprytkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <errno.h>
-# include "libft.h"
+# include "../libft/incs/libft.h"
 
 # define TRUE 1
 # define FALSE 0
