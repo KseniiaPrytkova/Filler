@@ -6,7 +6,7 @@ $ make (inside libft folder)
 ```
 $ make (in the root folder)
 ```
-````
+```
 $./resources/filler_vm -f resources/maps/map00 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler 2>mylogfile
 ```
 
