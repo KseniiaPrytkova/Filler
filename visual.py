@@ -148,8 +148,8 @@ if __name__ == "__main__":
 	while init:
 		line, init, state = read_init(settings, p, state)
 
-	WINDOW_MAX_W = 1000
-	WINDOW_MAX_H = 800
+	WINDOW_MAX_W = 900
+	WINDOW_MAX_H = 700
 
 	piece_w = WINDOW_MAX_W / settings['board_dim_y']
 	piece_h = WINDOW_MAX_H / settings['board_dim_x']
