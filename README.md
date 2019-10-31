@@ -19,4 +19,11 @@ $ python ./visual.py -f resources/maps/map00 -p1 ./kprytkov.filler -p2 ./resourc
 ```
 ![terminal_game](resources/py_game.gif)
 
-- [video_to_gif](https://ezgif.com/video-to-gif/ezgif-2-70f70735175d.mov)
+
+- check for memory leaks: `while true;do leaks -q kprytkov.filler;sleep 2;clear;done`
+or add this flag to the Makefile: `-fsanitize=address`:
+```
+FLAGS = -O3 -Wall -Wextra -Werror -Iinclude/ -Ilibft/ -Llibft/ -lft -fsanitize=address
+```
+or u can always use `valgrind`;
+- [link to convert video to gif](https://ezgif.com/video-to-gif/ezgif-2-70f70735175d.mov)
