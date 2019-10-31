@@ -18,3 +18,5 @@ create directory /home/kprytkov/pygame and then run `$ pip install --target=/hom
 $ python ./visual.py -f resources/maps/map00 -p1 ./kprytkov.filler -p2 ./resources/players/superjeannot.filler
 ```
 ![terminal_game](resources/py_game.gif)
+
+- [video_to_gif](https://ezgif.com/video-to-gif/ezgif-2-70f70735175d.mov)
